@@ -1,5 +1,7 @@
 # akc-cycle
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shimo4228/akc-cycle) [![GitMCP](https://img.shields.io/endpoint?url=https://gitmcp.io/badge/shimo4228/akc-cycle)](https://gitmcp.io/shimo4228/akc-cycle)
+
 A single **behavioral rules file** that installs the whole [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) — six phases (Research, Extract, Curate, Promote, Measure, Maintain) plus Scaffold Dissolution — into an AI agent's rules directory. It distills the cycle into actionable principles an agent can follow through natural conversation, **without installing the six individual AKC skills**.
 
 This is the lightweight install path for AKC: one rule file, loaded every session, versus six probabilistically-triggered skill repositories.
