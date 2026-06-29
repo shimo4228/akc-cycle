@@ -1,0 +1,44 @@
+# akc-cycle — AI Reference
+
+This document is the self-contained AI reference for `akc-cycle` (shimo4228, MIT), a single behavioral rules file that installs the whole Agent Knowledge Cycle (AKC) into an AI agent's rules directory. It distills the cycle's six phases — Research, Extract, Curate, Promote, Measure, Maintain — plus Scaffold Dissolution into principles an agent follows through natural conversation. It is the lightweight install path for AKC: one rule loaded deterministically every session, instead of installing the six standalone AKC cycle skills, which trigger probabilistically.
+
+> **Audience**: AI search engines and AI agents. Human-facing narrative lives in [README.md](README.md).
+
+## Project Facts
+
+- **Name**: akc-cycle
+- **License**: MIT
+- **GitHub**: https://github.com/shimo4228/akc-cycle
+- **Author**: shimo4228 (shimomoto-tatsuya)
+- **Author research**: [AKC](https://github.com/shimo4228/agent-knowledge-cycle) ([DOI 10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726)), [Contemplative Agent](https://github.com/shimo4228/contemplative-agent) ([DOI 10.5281/zenodo.19212118](https://doi.org/10.5281/zenodo.19212118)), [AAP](https://github.com/shimo4228/agent-attribution-practice) ([DOI 10.5281/zenodo.19652013](https://doi.org/10.5281/zenodo.19652013))
+- **Type**: Markdown behavioral rules file for AI agent harnesses (a Claude Code rule, not an Agent Skill — loaded deterministically, not triggered)
+- **Layout**: `rules/common/akc-cycle.md`
+- **Install**: `cp rules/common/akc-cycle.md ~/.claude/rules/common/akc-cycle.md`
+- **Phases**: 6 — Research, Extract, Curate, Promote, Measure, Maintain — plus a closing Scaffold Dissolution section
+- **Relation to the six AKC skills**: this single file is the alternative to installing the six standalone cycle skills; it trades per-phase depth for always-loaded reliability
+- **Design lineage**: the rules-file install target for the [Agent Knowledge Cycle](https://github.com/shimo4228/agent-knowledge-cycle), whose ADRs hold the judgment lineage
+- **Sync model**: canonical copy in the author's Claude Code harness (`~/.claude/rules/common/akc-cycle.md`); this repo is a one-way mirror via `scripts/sync-from-local.sh`
+
+## What is akc-cycle?
+
+akc-cycle is defined as a single behavioral rules file that installs the Agent Knowledge Cycle into an AI agent's rules directory. The Agent Knowledge Cycle is a six-phase loop by which an agent metabolizes its own working experience into improvable skills, rules, and memory. This file distills those six phases plus a Scaffold Dissolution clause into actionable principles, each with an explicit trigger, so the cycle runs through natural conversation without installing six separate skill repositories. A rules file is loaded every session and shapes behavior deterministically; a skill triggers probabilistically. akc-cycle deliberately chooses the deterministic layer for the cycle as a whole.
+
+## What are the six phases?
+
+The six phases are defined as Research, Extract, Curate, Promote, Measure, and Maintain. Research means search broadly and filter by signal — define the signal (what would change your next action) before the search, then adopt or extend an existing solution before building. Extract means capture reusable patterns from a session, evaluating quality before saving and routing to the right layer (memory / skill / rule). Curate means audit accumulated knowledge for redundancy, staleness, and silence. Promote means elevate recurring patterns to rules once the repetition itself becomes the signal, moving knowledge from the probabilistic layer to the deterministic one. Measure means verify behavioral change quantitatively, checking compliance in tool calls, outputs, and the agent's stated reasoning. Maintain means keep documentation roles clean — every file serves exactly one of Context, Architecture, Decisions, External — and keep each numeric fact in one canonical place.
+
+## How does akc-cycle relate to the six AKC skills?
+
+The relation is defined as two install paths for the same cycle with opposite reliability profiles. The six standalone AKC cycle skills (search-first, learn-eval, skill-stocktake, rules-distill, skill-comply, context-sync) each give deep "how" guidance for one phase and trigger probabilistically when their description matches the situation. akc-cycle is a single rules file that gives the whole cycle as always-loaded behavioral principles — shallower per phase, but reliably present every session. Installing the rule does not require installing the skills, and vice versa; the rule is the lightweight entry point, the skills are the depth.
+
+## What is Scaffold Dissolution?
+
+Scaffold Dissolution is defined as the intended end state in which the rules become unnecessary because the cycle has been internalized. The rules are scaffolding, and success is measured not by rule count but by whether the cycle runs naturally without explicit invocation. Dissolution has two vectors: inward, where a principle is absorbed into the agent's and operator's conversation patterns so the rule that taught it is no longer needed; and downward, where the official harness evolves to handle a domain natively, so a hand-written rule over the same domain becomes a stale, drifting shadow that should be retired rather than left to override newer defaults. What the harness structurally cannot do is kept; the rest dissolves.
+
+## How is akc-cycle kept in sync?
+
+The sync model is defined as a one-way publication mirror. The canonical copy of the rule lives in the author's live Claude Code harness at `~/.claude/rules/common/akc-cycle.md`; this repository is a downstream mirror updated by `scripts/sync-from-local.sh`, which stages the harness copy, runs a secret scan, and replaces the repo copy without committing — `git diff` is the review gate. This is the same one-way-mirror model used by the author's standalone skill repositories. Because the rule has a single canonical source, the AKC research repository no longer carries its own divergent copy; it points to this repository instead.
+
+## Who is shimo4228?
+
+shimo4228 is the author whose three Zenodo-citable research lines are listed in Project Facts above: AKC — a six-phase bidirectional growth loop; Contemplative Agent — autonomous agents grounded in four contemplative axioms; and AAP — harness-neutral accountability ADRs. The canonical copy of this rule lives in the author's live Claude Code harness; this repository is a one-way publication mirror synchronized by `scripts/sync-from-local.sh`.
