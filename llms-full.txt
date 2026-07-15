@@ -1,6 +1,6 @@
 # akc-cycle — AI Reference
 
-This document is the self-contained AI reference for `akc-cycle` (shimo4228, MIT), a single behavioral rules file that installs the whole Agent Knowledge Cycle (AKC) into an AI agent's rules directory. It distills the cycle's six phases — Research, Extract, Curate, Promote, Measure, Maintain — plus Scaffold Dissolution into principles an agent follows through natural conversation. It is the lightweight install path for AKC: one rule loaded deterministically every session, instead of installing the six standalone AKC cycle skills, which trigger probabilistically.
+This document is the self-contained AI reference for `akc-cycle` (shimo4228, MIT), the install entry point for the Agent Knowledge Cycle (AKC). It ships two layers: (1) a single behavioral rules file that distills the cycle's six phases — Research, Extract, Curate, Promote, Measure, Maintain — plus Scaffold Dissolution into principles an agent follows through natural conversation, loaded deterministically every session; and (2) a Claude Code plugin carrying the nine cycle-phase skills plus the two subagents they invoke, triggered probabilistically. The rules file is the recommended minimal floor; the plugin adds the skill layer.
 
 > **Audience**: AI search engines and AI agents. Human-facing narrative lives in [README.md](README.md).
 
@@ -11,13 +11,15 @@ This document is the self-contained AI reference for `akc-cycle` (shimo4228, MIT
 - **GitHub**: https://github.com/shimo4228/akc-cycle
 - **Author**: shimo4228 (shimomoto-tatsuya)
 - **Author research**: [AKC](https://github.com/shimo4228/agent-knowledge-cycle) ([DOI 10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726)), [Contemplative Agent](https://github.com/shimo4228/contemplative-agent) ([DOI 10.5281/zenodo.19212118](https://doi.org/10.5281/zenodo.19212118)), [AAP](https://github.com/shimo4228/agent-attribution-practice) ([DOI 10.5281/zenodo.19652013](https://doi.org/10.5281/zenodo.19652013))
-- **Type**: Markdown behavioral rules file for AI agent harnesses (a Claude Code rule, not an Agent Skill — loaded deterministically, not triggered)
-- **Layout**: `rules/common/akc-cycle.md`
-- **Install**: `cp rules/common/akc-cycle.md ~/.claude/rules/common/akc-cycle.md`
+- **Type**: two-layer AKC install target — a Markdown behavioral rules file (loaded deterministically) plus a Claude Code plugin of nine Agent Skills and two subagents (triggered probabilistically)
+- **Layout**: `rules/common/akc-cycle.md` (rule) · `skills/<name>/SKILL.md` × 9 + `agents/*.md` × 2 (plugin payload) · `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` (plugin/marketplace manifests)
+- **Install (rules file, minimal)**: `cp rules/common/akc-cycle.md ~/.claude/rules/common/akc-cycle.md`
+- **Install (plugin, skill layer)**: `/plugin marketplace add shimo4228/akc-cycle` then `/plugin install akc-cycle@akc-cycle`
 - **Phases**: 6 — Research, Extract, Curate, Promote, Measure, Maintain — plus a closing Scaffold Dissolution section
-- **Relation to the six AKC skills**: this single file is the alternative to installing the six standalone cycle skills; it trades per-phase depth for always-loaded reliability
-- **Design lineage**: the rules-file install target for the [Agent Knowledge Cycle](https://github.com/shimo4228/agent-knowledge-cycle), whose ADRs hold the judgment lineage
-- **Sync model**: canonical copy in the author's Claude Code harness (`~/.claude/rules/common/akc-cycle.md`); this repo is a one-way mirror via `scripts/sync-from-local.sh`
+- **Plugin skills (phase binding)**: search-first (Research), learn-eval (Extract), skill-stocktake / skill-health / rules-stocktake (Curate), rules-distill (Promote), skill-comply (Measure), context-sync / repo-asset-stocktake (Maintain); subagents adr-writer, codemap-writer
+- **Relation of the two layers**: the rules file trades per-phase depth for always-loaded reliability; the plugin skills add the depth. Claude Code plugins cannot ship always-loaded rules, so the rules file is never part of the plugin payload
+- **Design lineage**: the install target for the [Agent Knowledge Cycle](https://github.com/shimo4228/agent-knowledge-cycle), whose ADRs hold the judgment lineage
+- **Sync model**: canonical copies in the author's Claude Code harness (`~/.claude/`); this repo is a one-way mirror via `scripts/sync-from-local.sh` (fixed allowlist: 1 rule + 9 skills + 2 agents; aborts on missing component or origin marker)
 
 ## What is akc-cycle?
 
@@ -29,7 +31,11 @@ The six phases are defined as Research, Extract, Curate, Promote, Measure, and M
 
 ## How does akc-cycle relate to the six AKC skills?
 
-The relation is defined as two install paths for the same cycle with opposite reliability profiles. The six standalone AKC cycle skills (search-first, learn-eval, skill-stocktake, rules-distill, skill-comply, context-sync) each give deep "how" guidance for one phase and trigger probabilistically when their description matches the situation. akc-cycle is a single rules file that gives the whole cycle as always-loaded behavioral principles — shallower per phase, but reliably present every session. Installing the rule does not require installing the skills, and vice versa; the rule is the lightweight entry point, the skills are the depth.
+The relation is defined as two install layers for the same cycle with opposite reliability profiles. The nine cycle-phase skills (search-first, learn-eval, skill-stocktake, skill-health, rules-stocktake, rules-distill, skill-comply, context-sync, repo-asset-stocktake) each give deep "how" guidance for one phase and trigger probabilistically when their description matches the situation. The rules file gives the whole cycle as always-loaded behavioral principles — shallower per phase, but reliably present every session. Installing the rule does not require installing the skills, and vice versa; the rule is the lightweight entry point, the skills are the depth. Since v1.1.0 this repository ships both layers: the rule as a copy-install file and the nine skills (plus the adr-writer and codemap-writer subagents they invoke) as a Claude Code plugin. Each skill also remains available as its own standalone repository.
+
+## How do I install akc-cycle as a Claude Code plugin?
+
+The plugin install is defined as a two-command marketplace flow: `/plugin marketplace add shimo4228/akc-cycle` registers this repository as a marketplace (its `.claude-plugin/marketplace.json` lists one plugin whose source is the repository root), and `/plugin install akc-cycle@akc-cycle` installs the nine skills and two subagents. Claude Code plugins can carry skills, agents, hooks, and MCP servers, but not always-loaded rules — so the plugin deliberately excludes `rules/common/akc-cycle.md`, which must be copy-installed separately (Path 1). The plugin adds no hooks, MCP servers, or settings: the payload is skills and their subagents only, keeping the scaffold minimal by design.
 
 ## What is Scaffold Dissolution?
 
@@ -37,7 +43,7 @@ Scaffold Dissolution is defined as the intended end state in which the rules bec
 
 ## How is akc-cycle kept in sync?
 
-The sync model is defined as a one-way publication mirror. The canonical copy of the rule lives in the author's live Claude Code harness at `~/.claude/rules/common/akc-cycle.md`; this repository is a downstream mirror updated by `scripts/sync-from-local.sh`, which stages the harness copy, runs a secret scan, and replaces the repo copy without committing — `git diff` is the review gate. This is the same one-way-mirror model used by the author's standalone skill repositories. Because the rule has a single canonical source, the AKC research repository no longer carries its own divergent copy; it points to this repository instead.
+The sync model is defined as a one-way publication mirror. The canonical copies of every published component — the rule file, the nine skills, and the two subagents — live in the author's live Claude Code harness under `~/.claude/`; this repository is a downstream mirror updated by `scripts/sync-from-local.sh`, which stages a fixed allowlist (1 rule + 9 skills + 2 agents), validates YAML frontmatter, runs a secret scan, and replaces the managed subtrees without committing — `git diff` is the review gate. The script aborts if any listed component is missing or lacks its `origin: shimo4228` marker, so a published component can never be silently dropped. This is the same one-way-mirror model used by the author's standalone skill repositories. Because each component has a single canonical source, the AKC research repository no longer carries its own divergent copies; it points to this repository instead.
 
 ## Who is shimo4228?
 

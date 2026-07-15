@@ -1,0 +1,14 @@
+{
+  "name": "akc-cycle",
+  "owner": {
+    "name": "shimo4228"
+  },
+  "description": "Self-owned marketplace for the Agent Knowledge Cycle (AKC) plugin. Canonical sources stay in the author's repositories; this marketplace only points at them.",
+  "plugins": [
+    {
+      "name": "akc-cycle",
+      "source": "./",
+      "description": "Nine AKC cycle-phase skills plus their two subagents. Pair with the copy-installed rules file for the full cycle."
+    }
+  ]
+}

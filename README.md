@@ -2,20 +2,32 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shimo4228/akc-cycle) [![GitMCP](https://img.shields.io/endpoint?url=https://gitmcp.io/badge/shimo4228/akc-cycle)](https://gitmcp.io/shimo4228/akc-cycle)
 
-A single **behavioral rules file** that installs the whole [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) — six phases (Research, Extract, Curate, Promote, Measure, Maintain) plus Scaffold Dissolution — into an AI agent's rules directory. It distills the cycle into actionable principles an agent can follow through natural conversation, **without installing the six individual AKC skills**.
+The install entry point for the [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) — six phases (Research, Extract, Curate, Promote, Measure, Maintain) plus Scaffold Dissolution. Two install paths, minimal to full:
 
-This is the lightweight install path for AKC: one rule file, loaded every session, versus six probabilistically-triggered skill repositories.
+1. **Rules file (minimal, recommended floor)** — a single behavioral rules file, loaded every session, that distills the cycle into actionable principles an agent can follow through natural conversation, without installing any skills.
+2. **Claude Code plugin (skill layer)** — the nine cycle-phase skills plus the two subagents they invoke, installed via the plugin marketplace.
 
 ## Install
 
-### Claude Code
+### Path 1 — Rules file (minimal)
 
 ```bash
 # Copy into your global rules directory
 cp rules/common/akc-cycle.md ~/.claude/rules/common/akc-cycle.md
 ```
 
-Any agent harness that loads a rules directory each session works the same way — point the copy at wherever your harness reads rules from.
+Any agent harness that loads a rules directory each session works the same way — point the copy at wherever your harness reads rules from. This path is harness-agnostic and is all you need for the cycle to run.
+
+### Path 2 — Claude Code plugin (skill layer)
+
+```
+/plugin marketplace add shimo4228/akc-cycle
+/plugin install akc-cycle@akc-cycle
+```
+
+Installs nine skills bound to the six phases — `search-first` (Research), `learn-eval` (Extract), `skill-stocktake` / `skill-health` / `rules-stocktake` (Curate), `rules-distill` (Promote), `skill-comply` (Measure), `context-sync` / `repo-asset-stocktake` (Maintain) — plus the `adr-writer` and `codemap-writer` subagents they invoke.
+
+> **Note**: Claude Code plugins cannot ship always-loaded rules, so the plugin does **not** include the rules file. The rules file (Path 1) is the cycle's floor; the plugin adds the deeper how-to layer on top. The skills are scaffolding by design — see Scaffold Dissolution below.
 
 ## What it gives you
 
@@ -34,16 +46,16 @@ It closes with **Scaffold Dissolution**: these rules are scaffolding, and succes
 
 ## Syncing from the harness
 
-The canonical copy of this rule lives in the author's live Claude Code harness (`~/.claude/rules/common/akc-cycle.md`). This repository is a one-way publication mirror:
+The canonical copies of every published component — the rule file, the nine skills, and the two subagents — live in the author's live Claude Code harness (`~/.claude/`). This repository is a one-way publication mirror; the sync script publishes a fixed allowlist and aborts if any listed component is missing or lacks its origin marker:
 
 ```bash
 scripts/sync-from-local.sh --dry-run   # report differences only
 scripts/sync-from-local.sh             # apply to working tree (never commits)
 ```
 
-## About this rule
+## About this repository
 
-This rules file belongs to the [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) research line — a Zenodo-citable six-phase bidirectional growth loop ([DOI 10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726)) for sustaining intent alignment between an AI agent and its operator over time. The AKC repository holds the judgment lineage (ADRs), the concept-level knowledge graph, and the six standalone cycle skills; this repository is the cycle's **rules-file install target**. AKC is one of three research lines by [@shimo4228](https://github.com/shimo4228), alongside [Contemplative Agent](https://github.com/shimo4228/contemplative-agent) ([DOI 10.5281/zenodo.19212118](https://doi.org/10.5281/zenodo.19212118)) — autonomous agents grounded in four contemplative axioms — and [Agent Attribution Practice (AAP)](https://github.com/shimo4228/agent-attribution-practice) ([DOI 10.5281/zenodo.19652013](https://doi.org/10.5281/zenodo.19652013)) — harness-neutral ADRs on accountability distribution.
+This repository belongs to the [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) research line — a Zenodo-citable six-phase bidirectional growth loop ([DOI 10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726)) for sustaining intent alignment between an AI agent and its operator over time. The AKC repository holds the judgment lineage (ADRs) and the concept-level knowledge graph; this repository is the cycle's **install target** — the rules file plus the skill-layer plugin. Each cycle skill also has its own standalone repository under [@shimo4228](https://github.com/shimo4228). AKC is one of three research lines by [@shimo4228](https://github.com/shimo4228), alongside [Contemplative Agent](https://github.com/shimo4228/contemplative-agent) ([DOI 10.5281/zenodo.19212118](https://doi.org/10.5281/zenodo.19212118)) — autonomous agents grounded in four contemplative axioms — and [Agent Attribution Practice (AAP)](https://github.com/shimo4228/agent-attribution-practice) ([DOI 10.5281/zenodo.19652013](https://doi.org/10.5281/zenodo.19652013)) — harness-neutral ADRs on accountability distribution.
 
 ## License
 

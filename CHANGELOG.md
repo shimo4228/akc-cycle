@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] — 2026-07-15
+
+The repository now doubles as a Claude Code plugin: rules-file copy-install (minimal floor) and plugin install (skill layer) live side by side as the cycle's two install paths.
+
+### Added
+
+- `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` — the repository is its own plugin marketplace (`/plugin marketplace add shimo4228/akc-cycle`); the single listed plugin sources from the repository root.
+- `skills/` — the nine cycle-phase skills, synced from the harness canonical: search-first (Research), learn-eval (Extract), skill-stocktake / skill-health / rules-stocktake (Curate), rules-distill (Promote), skill-comply (Measure), context-sync / repo-asset-stocktake (Maintain).
+- `agents/` — the two subagents the skills invoke: adr-writer, codemap-writer.
+
+### Changed
+
+- `scripts/sync-from-local.sh` — extended from the single-rule variant to a fixed-allowlist variant (1 rule + 9 skills + 2 agents) with staging, runtime-artifact pruning, YAML frontmatter validation, and directory-wide secret scan; still aborts on any missing component or origin marker, still never commits.
+- `README.md` / `llms.txt` / `llms-full.txt` — restructured around the two install paths. Claude Code plugins cannot ship always-loaded rules, so the rules file remains copy-install only and is deliberately not part of the plugin payload.
+
 ## [1.0.0] — 2026-06-30
 
 Initial release as a standalone rules-file repository.

@@ -1,20 +1,22 @@
 # akc-cycle
 
-> A single behavioral rules file (MIT) that installs the whole Agent Knowledge Cycle (AKC) — six phases (Research, Extract, Curate, Promote, Measure, Maintain) plus Scaffold Dissolution — into an AI agent's rules directory. It is the lightweight install path for AKC: one rule loaded every session, instead of six probabilistically-triggered skill repositories. Copy `rules/common/akc-cycle.md` into your harness rules directory and the cycle runs through natural conversation.
+> The install entry point (MIT) for the Agent Knowledge Cycle (AKC) — six phases (Research, Extract, Curate, Promote, Measure, Maintain) plus Scaffold Dissolution. Two install paths: (1) a single behavioral rules file — copy `rules/common/akc-cycle.md` into your harness rules directory and the cycle runs through natural conversation, loaded every session; (2) a Claude Code plugin carrying the nine cycle-phase skills plus their two subagents (`/plugin marketplace add shimo4228/akc-cycle`). The rules file is the recommended minimal floor; the plugin adds the skill layer.
 
 ## Core documentation
 
 - [llms-full.txt](llms-full.txt): self-contained Q&A reference for AI agents (Project Facts, question-form H2 sections)
 - [README.md](README.md): human-facing narrative (install, per-phase table, sync model)
 - [rules/common/akc-cycle.md](rules/common/akc-cycle.md): the rule file itself — six phases with trigger conditions plus Scaffold Dissolution
+- [.claude-plugin/plugin.json](.claude-plugin/plugin.json): Claude Code plugin manifest for the skill layer (nine skills in `skills/`, two subagents in `agents/`)
 
 ## Architecture
 
-- Single rules file, no scripts in the install payload, no subagents — distinct from the six standalone AKC cycle skills, which are probabilistically triggered. This rule is loaded deterministically every session.
+- Two-layer install: the rules file is loaded deterministically every session (the floor); the plugin's nine skills are probabilistically triggered (the depth). Claude Code plugins cannot ship always-loaded rules, so the rules file stays a copy-install and is not part of the plugin payload.
+- Plugin payload: `search-first` (Research), `learn-eval` (Extract), `skill-stocktake` / `skill-health` / `rules-stocktake` (Curate), `rules-distill` (Promote), `skill-comply` (Measure), `context-sync` / `repo-asset-stocktake` (Maintain), plus the `adr-writer` and `codemap-writer` subagents they invoke. The repo is its own marketplace (`.claude-plugin/marketplace.json`, source `./`).
 - Six phases, each a principle + explicit trigger: Research (search broadly, filter by signal), Extract (capture reusable patterns), Curate (audit accumulated knowledge), Promote (elevate recurring patterns to rules), Measure (verify behavioral change quantitatively), Maintain (keep documentation roles clean)
 - Scaffold Dissolution: the rules are scaffolding; success is the cycle running without explicit invocation, by absorption inward (conversation patterns) or downward (harness substrate)
 - Design lineage: the rules-file install target for the [Agent Knowledge Cycle](https://github.com/shimo4228/agent-knowledge-cycle) ([DOI 10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726))
-- Sync model: canonical copy lives in the author's Claude Code harness (`~/.claude/rules/common/akc-cycle.md`); this repo is a one-way mirror via `scripts/sync-from-local.sh`
+- Sync model: canonical copies of the rule, the nine skills, and the two subagents live in the author's Claude Code harness (`~/.claude/`); this repo is a one-way mirror via `scripts/sync-from-local.sh` (fixed allowlist, aborts on any missing component or origin marker)
 
 ## Sibling research lines
 
