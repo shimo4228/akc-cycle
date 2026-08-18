@@ -62,9 +62,26 @@ Before any other detection, verify that `docs/CODEMAPS/` (if present) reflects t
 
 | Signal | Detection | Threshold |
 |---|---|---|
-| A. Timestamp lag | `git log -1 --format=%ct -- docs/CODEMAPS/` vs source dirs' latest commit ctime | source newer by **≥ 7 days** |
+| A0. Source sha lag (**takes precedence over A**) | read `Source: <sha>` from the CODEMAPS freshness header, confirm it resolves (`git cat-file -e "<sha>^{commit}"`), then `git rev-list --count <sha>..HEAD -- <src dirs>` | **≥ 1 commit** on the source dirs |
+| A. Timestamp lag (fallback — only when no header carries `Source`) | `git log -1 --format=%ct -- docs/CODEMAPS/` vs source dirs' latest commit ctime | source newer by **≥ 7 days** |
 | B. File count drift | `find <src>/ -type f \( -name '*.ts' -o -name '*.py' -o -name '*.go' -o -name '*.rs' -o -name '*.swift' \) \| wc -l` vs the `Files scanned: N` in the newest CODEMAPS freshness header (`find -name` does **not** brace-expand — `'*.{ts,py}'` silently matches 0 files and forces a −100% hit) | **±20%** delta |
 | C. Missing CODEMAPS | `docs/CODEMAPS/INDEX.md` absent, or only `architecture.md` exists | immediate hit |
+
+**A0 vs A**: the header format (including `Source`) is defined in
+`~/.claude/agents/codemap-writer.md` — read it, never restate it. When `Source` is present it
+answers the question A only approximates: A measures how recently the codemap *file* was
+touched, so an unrelated one-line edit inside a source-changing commit resets it, while A0
+counts commits on the source dirs since the sha the codemap actually describes. Evaluate A0
+per codemap file and take the maximum. Legacy headers (no `Source`) fall back to A unchanged;
+say which rule fired in the log so a `no hit` can be read back. A0 is more sensitive than A by
+design — one source commit is enough — because the failure this replaces was a stale codemap
+being reported fresh.
+
+**A0 must never fail to `no hit`.** A `Source` that does not resolve in this repo's history
+(squash, rebase, shallow clone) makes `git rev-list` exit 128 with no count — hence the
+`cat-file -e` guard. Treat an unresolvable sha exactly like a missing one: fall back to A for
+that file and log `A0 unresolvable (<sha>) → A`. Silence from a broken check reads identically
+to a clean result, which is the failure mode this whole signal exists to remove.
 
 If `docs/CODEMAPS/` does not exist at all and the project is small (< 30 source files), skip Phase 0 silently — codemaps are optional, not mandatory.
 
@@ -74,7 +91,8 @@ If `docs/CODEMAPS/` does not exist at all and the project is small (< 30 source 
 
    ```
    Phase 0 — Codemap Freshness
-   Signal A (timestamp lag):  CODEMAPS 2026-04-30, src 2026-05-20 → 20 days, HIT
+   Signal A0 (source sha):    Source 3320fd3, 6 commits on src/ since → HIT (A skipped)
+   Signal A (timestamp lag):  n/a — headers carry Source, A0 takes precedence
    Signal B (file count):     CODEMAPS Files: 142, current: 178 → +25%, HIT
    Signal C (missing):        all required files present, no hit
    ```
@@ -190,7 +208,7 @@ If ADR records need to be created (either a missing `docs/adr/` directory, or bu
 
 Delegate to the `adr-writer` skill. Do not inline an ADR template here — duplicating the template invites drift between context-sync's version and the canonical adr-writer version. Instead:
 
-1. For each decision to extract, gather the 6 inputs (Title / Status / Context / Decision / Alternatives / Consequences) from the source file
+1. For each decision to extract, gather the 7 inputs (Title / Status / Context / Decision / Review-when / Alternatives / Consequences) from the source file — Review-when (expiry conditions) is rarely written down in a CLAUDE.md; ask the user rather than inventing it
 2. Invoke `/adr-writer` once per decision with those inputs
 3. `adr-writer` handles: directory creation, sequence numbering, README index update, body generation via the adr-writer agent
 4. If the user runs context-sync in non-interactive mode where invoking another skill is impractical, surface the list of decisions to extract and ask the user to run `/adr-writer` for each later — do not write partial ADRs from context-sync directly
@@ -234,6 +252,7 @@ git log -1 --format="%ci" -- <doc-file>
 - [ ] Package metadata (version, dependencies) matches documentation
 - [ ] No documentation files untouched for 90+ days (flag as potentially stale)
 - [ ] ADR index matches actual ADR files on disk
+- [ ] If ADRs carry `## Review-when`: any ADR whose trigger has fired carries a dated `> **注記（…）**` under the affected section, or is superseded — not left reading as current
 
 If `graph.jsonld` exists in the repo, also check:
 - [ ] `ResearchLine` `@id` uses concept DOI (parent record), not latest versioned DOI
