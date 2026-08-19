@@ -1,6 +1,6 @@
 # akc-cycle
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shimo4228/akc-cycle) [![GitMCP](https://img.shields.io/endpoint?url=https://gitmcp.io/badge/shimo4228/akc-cycle)](https://gitmcp.io/shimo4228/akc-cycle)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shimo4228/akc-cycle)
 
 The install entry point for the [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) — six phases (Research, Extract, Curate, Promote, Measure, Maintain) plus Scaffold Dissolution. Two install paths, minimal to full:
 
