@@ -125,7 +125,9 @@ mode is exactly that dilution. Do NOT pass prior verdicts or the ledger to batch
 
 Each batch agent applies, per skill:
 
-**Stage 1 — binary screen.** Explicit Yes/No per item; surface only the No answers:
+**Stage 1 — binary screen.** Explicit Yes/No per item; surface only the No answers
+(these four questions are the canonical set — `skill-creator` §4 reuses them for its
+creation-time draft gate by reference, not by copy):
 
 - [ ] Actionability: concrete steps/commands/examples you can act on?
 - [ ] Scope fit: name, trigger (description), and body aligned — not too broad or narrow?
@@ -337,6 +339,8 @@ every write.
 - `generation-audit` — on a model-generation change, collects runtime-layer evidence
   (conflict / redundancy / drift) and hands the skills slice to Phase 4 synthesis as
   external evidence (read, never require).
+- `harness-boundary` — design-time lens (layer / portability / obsolescence) for proposed
+  mechanisms; applied to an installed skill, its Delete / Move are Phase 4 evidence only.
 - `repo-asset-stocktake` — the same stocktake pattern for a project repo's non-code
   assets.
 - `llm-as-judge` — the generic judge design canon (binary screen → pressure-test →
