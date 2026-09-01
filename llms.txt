@@ -6,7 +6,7 @@
 
 - [llms-full.txt](llms-full.txt): self-contained Q&A reference for AI agents (Project Facts, question-form H2 sections)
 - [README.md](README.md): human-facing narrative (install, per-phase table, sync model)
-- [rules/common/akc-cycle.md](rules/common/akc-cycle.md): the rule file itself — six phases with trigger conditions plus Scaffold Dissolution
+- [rules/common/akc-cycle.md](rules/common/akc-cycle.md): the rule file itself (self-contained edition, owned by this repo) — six phases with trigger conditions, Scaffold Dissolution with its evidence standard, and digests of the AKC worldview mechanisms (ADR-0024/0025/0026)
 - [.claude-plugin/plugin.json](.claude-plugin/plugin.json): Claude Code plugin manifest for the skill layer (nine skills in `skills/`, two subagents in `agents/`)
 
 ## Architecture
@@ -14,9 +14,10 @@
 - Two-layer install: the rules file is loaded deterministically every session (the floor); the plugin's nine skills are probabilistically triggered (the depth). Claude Code plugins cannot ship always-loaded rules, so the rules file stays a copy-install and is not part of the plugin payload.
 - Plugin payload: `search-first` (Research), `learn-eval` (Extract), `skill-stocktake` / `skill-health` / `rules-stocktake` (Curate), `rules-distill` (Promote), `skill-comply` (Measure), `context-sync` / `repo-asset-stocktake` (Maintain), plus the `adr-writer` and `codemap-writer` subagents they invoke. The repo is its own marketplace (`.claude-plugin/marketplace.json`, source `./`).
 - Six phases, each a principle + explicit trigger: Research (search broadly, filter by signal), Extract (capture reusable patterns), Curate (audit accumulated knowledge), Promote (elevate recurring patterns to rules), Measure (verify behavioral change quantitatively), Maintain (keep documentation roles clean)
-- Scaffold Dissolution: the rules are scaffolding; success is the cycle running without explicit invocation, by absorption inward (conversation patterns) or downward (harness substrate)
+- Scaffold Dissolution: the rules are scaffolding; success is the cycle running without explicit invocation, by absorption inward (conversation patterns) or downward (harness substrate). Evidence standard: completion evidence is held-out transfer (same-context ablation is only necessary evidence); negative-delta artifacts are actively deleted, audited at each model-generation turnover
+- Two editions: this repo owns the self-contained edition (no skills assumed); the author's harness runs a pointer edition delegating each mechanism to installed skills ([claude-harness rules/common/akc-cycle.md](https://github.com/shimo4228/claude-harness/blob/main/rules/common/akc-cycle.md)) — the reference shape the rules file can shrink into once the plugin is installed
 - Design lineage: the rules-file install target for the [Agent Knowledge Cycle](https://github.com/shimo4228/agent-knowledge-cycle) ([DOI 10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726))
-- Sync model: canonical copies of the rule, the nine skills, and the two subagents live in the author's Claude Code harness (`~/.claude/`); this repo is a one-way mirror via `scripts/sync-from-local.sh` (fixed allowlist, aborts on any missing component or origin marker)
+- Sync model: canonical copies of the nine skills and the two subagents live in the author's Claude Code harness (`~/.claude/`); this repo is a one-way mirror for those via `scripts/sync-from-local.sh` (fixed allowlist, aborts on any missing component or origin marker). The rules file is NOT synced — this repo owns the self-contained edition (since 2026-09-01)
 
 ## Sibling research lines
 

@@ -2,10 +2,12 @@
 # sync-from-local.sh — one-way export from the live Claude Code harness
 # (~/.claude) into this repo.
 #
-# akc-cycle variant: publishes the single harness-canonical rule file
-# (rules/common/akc-cycle.md) PLUS the fixed AKC-cycle plugin payload — the
+# akc-cycle variant: publishes the fixed AKC-cycle plugin payload — the
 # nine cycle-phase skills and the two subagents they invoke — so this repo
-# doubles as a Claude Code plugin (see .claude-plugin/). Unlike the aggregate
+# doubles as a Claude Code plugin (see .claude-plugin/). The rules file
+# (rules/common/akc-cycle.md) is NOT synced: since 2026-09-01 it is the
+# self-contained edition owned by this repo, distinct from the pointer
+# edition running in the author's harness. Unlike the aggregate
 # claude-harness sync, the published set is an explicit allowlist, not an
 # origin sweep: every listed component must exist in the harness and declare
 # the expected origin marker, or the script aborts (it never silently drops a
@@ -28,11 +30,10 @@ ORIGIN="${HARNESS_SYNC_ORIGIN:-shimo4228}"
 TARGET_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # the fixed published set (allowlist), relative to harness root / repo root
-RULE_REL="rules/common/akc-cycle.md"
 SKILLS=(search-first learn-eval skill-stocktake skill-health rules-stocktake
         rules-distill skill-comply context-sync repo-asset-stocktake)
 AGENTS=(adr-writer codemap-writer)
-SUBTREES=(rules skills agents)
+SUBTREES=(skills agents)
 
 DRY_RUN=0
 [[ "${1:-}" == "--dry-run" || "${1:-}" == "-n" ]] && DRY_RUN=1
@@ -58,7 +59,6 @@ require() {
   fi
 }
 
-require "$SOURCE_DIR/$RULE_REL"
 for s in "${SKILLS[@]}"; do require "$SOURCE_DIR/skills/$s/SKILL.md"; done
 for a in "${AGENTS[@]}"; do require "$SOURCE_DIR/agents/$a.md"; done
 
@@ -75,9 +75,8 @@ fi
 # --- staging ---
 STAGING="$(mktemp -d)"
 trap 'rm -rf "$STAGING"' EXIT
-mkdir -p "$STAGING/rules/common" "$STAGING/skills" "$STAGING/agents"
+mkdir -p "$STAGING/skills" "$STAGING/agents"
 
-cp "$SOURCE_DIR/$RULE_REL" "$STAGING/$RULE_REL"
 for s in "${SKILLS[@]}"; do cp -R "$SOURCE_DIR/skills/$s" "$STAGING/skills/"; done
 for a in "${AGENTS[@]}"; do cp "$SOURCE_DIR/agents/$a.md" "$STAGING/agents/"; done
 

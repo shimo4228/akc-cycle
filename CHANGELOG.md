@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] — 2026-09-01
+
+The rules file forks into two deliberate editions. This repo now owns the **self-contained edition** (no skills assumed); the author's harness runs a separate **pointer edition** that delegates each mechanism to installed skills. Previously the two files had drifted into being byte-identical — the compressed harness edition was being synced here, so the promised self-contained floor existed nowhere.
+
+### Changed
+
+- `rules/common/akc-cycle.md` — rewritten in English as the self-contained edition, owned by this repository (no longer synced from the harness): the six-phase Phase/Principle/Trigger table now lives in the rule body itself; Scaffold Dissolution gains its evidence standard (held-out transfer as completion evidence, active deletion of negative-delta artifacts — AKC ADR-0022 / ADR-0023); adds digests of three AKC worldview mechanisms — expiry-conditioned knowledge (ADR-0026), the judge/build/human attention topology (ADR-0024), and LLM-first artifact readability (ADR-0025).
+- `scripts/sync-from-local.sh` — the rule is removed from the sync allowlist (payload is now 9 skills + 2 agents); the managed subtrees shrink to `skills/` and `agents/`.
+- `README.md` / `llms.txt` / `llms-full.txt` — document the two-edition split and link the pointer edition running in the author's harness ([claude-harness](https://github.com/shimo4228/claude-harness/blob/main/rules/common/akc-cycle.md)) as the reference shape the rules file can shrink into once the plugin's skills are installed.
+
 ## [1.1.0] — 2026-07-15
 
 The repository now doubles as a Claude Code plugin: rules-file copy-install (minimal floor) and plugin install (skill layer) live side by side as the cycle's two install paths.

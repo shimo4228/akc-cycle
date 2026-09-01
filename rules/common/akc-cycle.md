@@ -1,40 +1,77 @@
 <!-- origin: shimo4228 -->
-<!-- rationale: ADR-0018 + ADR-0035 — skill 群が import する Scaffold Dissolution のローカル正本だけを常駐 -->
-<!-- review-when: import 元 skill が消えた時 / substrate が knowledge cycle を native 化した時 / モデル世代交代時 / 発散と照合の分離が会話パターンに吸収された時（却下記録の読み方節を溶かす） -->
-# AKC Rules (local edition)
+<!-- edition: self-contained — for harnesses WITHOUT the cycle-phase skills installed. This file is owned by this repo (not synced from the author's harness since 2026-09-01); the author's live harness runs a separate pointer edition that delegates each mechanism to installed skills. -->
+# Agent Knowledge Cycle (self-contained edition)
 
-6 phase の手順は各 skill が持つ。skill 未導入環境向けの自己完結版は AKC repo が正本。
+A six-phase cycle for metabolizing an agent's experience into improvable knowledge,
+distilled into one always-loaded rules file. It runs through natural conversation —
+no skills required. Source of judgment lineage:
+[agent-knowledge-cycle](https://github.com/shimo4228/agent-knowledge-cycle) (ADRs cited below).
+
+## The six phases
+
+Each phase is a behavioral principle with an explicit trigger. When a trigger fires,
+apply the principle in conversation.
+
+| Phase | Principle | Trigger |
+|-------|-----------|---------|
+| **Research** | Search broadly, filter by signal — define the signal before the search. Prefer existing solutions over building | A task adds a dependency or creates a utility that might already exist |
+| **Extract** | Capture reusable patterns from sessions as candidate knowledge (a note, a draft skill, a rule sketch) | End of a productive session; after a hard-won debugging victory |
+| **Curate** | Audit accumulated knowledge for redundancy, staleness, and silence (entries that never fire). Merge duplicates, date-stamp doubts | Skills/rules grow noticeably; a reference breaks |
+| **Promote** | Elevate patterns that keep recurring into standing rules — with the *why*, not just the instruction | The same advice resurfaces across artifacts and conversation |
+| **Measure** | Verify behavioral change, not artifact count — did the rule actually change what the agent does? | After adding or modifying a rule |
+| **Maintain** | Keep documentation roles clean: one home per fact, pointers elsewhere | After major refactoring; when context files bloat |
+
+Every promotion that shapes agent behavior passes a named **human approval gate**
+(ADR-0005): the human owns direction and the merge switch.
 
 ## Scaffold Dissolution
 
-rule は足場であり、実践が自然に回るようになれば簡素化・削除する。
+These rules are scaffolding. Success is measured not by rule count but by whether
+the cycle runs naturally once internalized. Simplify or delete a rule when practice
+no longer needs it:
 
-- **Inward** — 原則が会話パターンに吸収された
-- **Downward** — substrate が capability を native に持ち、手書き rule が古い既定を上書きする
+- **Inward** — the principle has been absorbed into conversation patterns
+- **Downward** — the substrate (model or harness) now provides the capability
+  natively, and the handwritten rule would override a better default
 
-モデル世代交代も downward のトリガー。旧世代向けの禁止・網羅的手順・反復強調は
-skill: `generation-audit` で再監査する。
+A model-generation turnover is a downward trigger: re-audit prohibitions,
+exhaustive procedures, and repeated emphasis written for older, weaker models.
 
-## ADR も足場である（2026-08-14 著者指示）
+Evidence standard for dissolving (ADR-0022 / ADR-0023):
 
-ADR はその時点の一時的判断の記録であって、恒久的な拘束ではない。新しいアイデアや
-観測が既存 ADR と衝突するとき、ADR を理由にアイデアを狭めない — supersede が正常系。
-これは公理 Emptiness（全 directive は文脈依存の guideline であり固定した本質を持たない）
-の適用でもある。記録は残し、判断は上書きする。初期コンセプト・初期構造にも同じことが
-言える: プロジェクトの発展を初期の足場が阻害し始めたら、足場の方を溶かす。
+- **Completion evidence is held-out transfer** — behaving the same with the
+  scaffold removed *in the same context* is only necessary evidence. Dissolve when
+  the behavior reproduces in a fresh context that never saw the scaffold
+- **The negative pole gets deleted, not shelved** — an artifact carrying negative
+  information (a drifted rule overriding a now-better default) is actively removed.
+  Silence, ablation, and transfer all detect only *absence*; audit for negative
+  deltas explicitly at each model-generation turnover
 
-読み方（ADR-0044）: ADR は日付つき仮説。`Date` と `## Review-when`（失効条件。0044 以降は
-必須、無い旧 ADR は Context の前提と Date で重みを決める）を先に見る。失効条件が発火した・
-前提が消えた ADR に拘束力は無い — 衝突は「supersede 候補」として提示し、旧 ADR には削除で
-なく日付つき注記を残す。
+## Expiry-conditioned knowledge (ADR-0026)
 
-## 却下記録の読み方（2026-08-24 著者指示）
+- A stored decision carries its own expiry conditions (review-when). A
+  recommendation whose expiry conditions cannot be stated is freshness-unknown —
+  weight it weakly
+- Decisions are dated hypotheses. When a new idea conflicts with an old decision,
+  supersede is the normal path — keep the record, overwrite the judgment, leave a
+  dated note instead of deleting
+- Rejection records follow the same reading: a past "don't re-propose" is a dated
+  hypothesis, not a permanent veto. Use it when adopting, never to narrow the
+  question space while diverging
 
-memory の「再提案しない」ガードにも上と同じ読み方を適用する — 日付つき仮説であり、
-失効条件の無いガードは弱い推定として扱う（knowledge-staleness の受け側。却下判断だけ
-陳腐化しない扱いにしない）。
+## Three-role attention topology (ADR-0024)
 
-**発散と照合を分離する**: 新アイデアの発散段階では ADR・memory の却下記録を反証に
-使わない。照合は採用判断の段で初めて行い、衝突は却下理由でなく supersede 候補として
-提示する。「再提案しない」は re-deploy の禁止であって問い空間には適用しない
-（具体手順の先例: skill `authorship-strategy` の inquiry-first）。
+Human attention is the scarce resource (ADR-0010). Under scarcity the loop splits
+into **judge** (spends model judgment to save human judgment: premise verification,
+worth-doing calls, dispatch, independent acceptance), **build** (implements), and
+**human** (direction and the binary merge gate only). What moves upstream is
+attention, not authority — the approval gate stays human.
+
+## LLM-first artifact readability (ADR-0025)
+
+The default reader, editor, and reviewer of cycle artifacts (skills, rules,
+distilled knowledge, decision records) is the next session's LLM. Optimize for
+locality over deep abstraction and explicitness over cleverness; the yardstick is
+context economy. Preserve verifiability (types, tests, frozen goldens, stated
+invariants) rather than prose explanations — those can be regenerated on demand.
+Budget human-facing prose only for the README and output surface text.
