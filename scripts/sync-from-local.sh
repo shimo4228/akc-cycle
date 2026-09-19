@@ -3,7 +3,7 @@
 # (~/.claude) into this repo.
 #
 # akc-cycle variant: publishes the fixed AKC-cycle plugin payload — the
-# nine cycle-phase skills and the two subagents they invoke — so this repo
+# nine cycle-phase skills — so this repo
 # doubles as a Claude Code plugin (see .claude-plugin/). The rules file
 # (rules/common/akc-cycle.md) is NOT synced: since 2026-09-01 it is the
 # self-contained edition owned by this repo, distinct from the pointer
@@ -32,8 +32,7 @@ TARGET_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # the fixed published set (allowlist), relative to harness root / repo root
 SKILLS=(search-first learn-eval skill-stocktake skill-health rules-stocktake
         rules-distill skill-comply context-sync repo-asset-stocktake)
-AGENTS=(adr-writer codemap-writer)
-SUBTREES=(skills agents)
+SUBTREES=(skills)
 
 DRY_RUN=0
 [[ "${1:-}" == "--dry-run" || "${1:-}" == "-n" ]] && DRY_RUN=1
@@ -60,7 +59,6 @@ require() {
 }
 
 for s in "${SKILLS[@]}"; do require "$SOURCE_DIR/skills/$s/SKILL.md"; done
-for a in "${AGENTS[@]}"; do require "$SOURCE_DIR/agents/$a.md"; done
 
 # --- guard: managed subtrees must be clean so the sync delta is reviewable ---
 if (( ! DRY_RUN )); then
@@ -75,10 +73,9 @@ fi
 # --- staging ---
 STAGING="$(mktemp -d)"
 trap 'rm -rf "$STAGING"' EXIT
-mkdir -p "$STAGING/skills" "$STAGING/agents"
+mkdir -p "$STAGING/skills"
 
 for s in "${SKILLS[@]}"; do cp -R "$SOURCE_DIR/skills/$s" "$STAGING/skills/"; done
-for a in "${AGENTS[@]}"; do cp "$SOURCE_DIR/agents/$a.md" "$STAGING/agents/"; done
 
 # --- prune runtime artifacts from the staged payload ---
 find "$STAGING" \( -name results.json -o -name '*.log' -o -name '*.pyc' \

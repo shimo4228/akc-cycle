@@ -1,7 +1,7 @@
 {
   "name": "akc-cycle",
-  "description": "Agent Knowledge Cycle (AKC) skill layer — the nine cycle-phase skills (Research / Extract / Curate / Promote / Measure / Maintain) plus the two subagents they invoke. The always-loaded rules-file floor (rules/common/akc-cycle.md) is not part of the plugin; copy it into your rules directory separately.",
-  "version": "1.1.0",
+  "description": "Agent Knowledge Cycle (AKC) skill layer — the nine cycle-phase skills (Research / Extract / Curate / Promote / Measure / Maintain). The always-loaded rules-file floor (rules/common/akc-cycle.md) is not part of the plugin; copy it into your rules directory separately.",
+  "version": "1.3.0",
   "author": {
     "name": "shimo4228",
     "url": "https://github.com/shimo4228"
