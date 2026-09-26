@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2026-09-26
+
+Skill-text refresh ahead of the Claude directory submission. No component is added or removed; the payload is still the nine cycle-phase skills.
+
+### Changed
+
+- `skills/` — synced from the harness canonical (via the public [claude-harness](https://github.com/shimo4228/claude-harness) mirror, 2026-09-26): search-first adopts an established candidate that matches the need by default and closes with a per-need Adopt / Adopt-part / Build verdict; learn-eval cites the measurement by ADR instead of inlining it; context-sync, rules-stocktake, skill-comply, and skill-stocktake carry their current upstream text.
+- `.claude-plugin/plugin.json` — version `1.4.0`.
+
 ## [1.3.0] — 2026-09-19
 
 The plugin payload shrinks to the nine cycle-phase skills. Both bundled subagents were retired in the author's harness, and the skills that used to call them now do that work in the main loop — no skill in the payload invokes a subagent that is no longer shipped.
