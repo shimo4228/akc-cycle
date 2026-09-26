@@ -31,7 +31,7 @@ skill-creator is the fixer.
 
 `changed` detects changes inline (no script):
 ```bash
-find ~/.claude/skills -name SKILL.md -newermt "$(jq -r .evaluated_at ~/.claude/skills/skill-stocktake/results.json)"
+find ~/.claude/skills -name SKILL.md -newermt "$(jq -r .evaluated_at ${CLAUDE_PLUGIN_ROOT}/skills/skill-stocktake/results.json)"
 ```
 
 ## Phase 0 — Structural pre-pass (deterministic, code-owned)
@@ -39,7 +39,7 @@ find ~/.claude/skills -name SKILL.md -newermt "$(jq -r .evaluated_at ~/.claude/s
 Run BEFORE any LLM judgment. These checks never ride on per-item attention:
 
 1. **skill-health scan** — dangling references / missing artifacts across the library
-   (run its scanner per `~/.claude/skills/skill-health/SKILL.md`). Mandatory, not
+   (run its scanner per `${CLAUDE_PLUGIN_ROOT}/skills/skill-health/SKILL.md`). Mandatory, not
    optional: this is the structural layer of Curate — code enumerates the debt,
    judgment decides — and judgment-owned checks let exactly these defects through.
 2. **Ledger hygiene** — for every `results.json` entry: the path must exist on disk and
@@ -72,7 +72,7 @@ Enumerate skill definition files with Glob (no script needed):
 transcribe the numbers; do not re-derive them by hand:
 
 ```bash
-uv run --project ~/.claude/skills/skill-stocktake python -m scripts.usage_stats --days 14
+uv run --frozen --project ${CLAUDE_PLUGIN_ROOT}/skills/skill-stocktake python -m scripts.usage_stats --days 14
 ```
 
 JSON out, exit 0 always: `counts` (per skill — `deliberate` / `slash` / `invoke` /
@@ -97,8 +97,8 @@ the library names once, serially, here:
 
 ```bash
 set -o pipefail   # without it a producer crash reads as "0 dead links, all healthy"
-uv run --project ~/.claude/skills/skill-health python -m scripts.scan_refs --external-urls |
-  uv run --project ~/.claude/skills/skill-health python -m scripts.url_liveness --urls-from -
+uv run --frozen --project ${CLAUDE_PLUGIN_ROOT}/skills/skill-health python -m scripts.scan_refs --external-urls |
+  uv run --frozen --project ${CLAUDE_PLUGIN_ROOT}/skills/skill-health python -m scripts.url_liveness --urls-from -
 ```
 
 Extraction is `scan_refs`'s job, not a `grep`: it skips fenced code blocks and template
@@ -177,7 +177,7 @@ creation-time draft gate by reference, not by copy):
   deterministic checks, every time. **Do not fetch URLs** — the parent checked them once
   in Phase 1 and hands you the verdicts; parallel batch agents each fetching is a burst.
 - [ ] Hygiene: is the body free of bloat — trivial prohibition lists, repeated emphasis,
-  and step-by-step recitals that could fold into a principle (skill-creator §3 の書き方)?
+  and step-by-step recitals that could fold into a principle (the skill-creator §3 writing guidance)?
   Do NOT fold greppable detection terms, self-enforcing prohibitions, or numeric
   thresholds — abstraction destroys their function (ADR-0058 rejected uniform
   shortening for exactly this). Bodies grow after creation; this question is the

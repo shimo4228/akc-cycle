@@ -92,6 +92,24 @@ find "$STAGING" \( -name __pycache__ -o -name .pytest_cache -o -name .venv \
 # never uses. The aggregate claude-harness script already pruned this; the fix had not
 # propagated to the vendored copies (2026-08-15).
 
+# --- rewrite harness-absolute self-references for the plugin install path ---
+# In the harness a published skill lives at ~/.claude/skills/<name>; installed as
+# a plugin it lives at ${CLAUDE_PLUGIN_ROOT}/skills/<name>, which Claude Code
+# substitutes in skill Markdown. Only the published skills' own paths change:
+# ~/.claude/skills/<other> (an unpublished skill, or the user's library that an
+# audit skill reads) stays as written. Markdown only — scripts resolve their own
+# location at runtime.
+python3 - "$STAGING" "${SKILLS[@]}" <<'PYEOF' || exit 1
+import pathlib, re, sys
+staging, skills = pathlib.Path(sys.argv[1]), sys.argv[2:]
+pat = re.compile(r"(?:~|\$HOME|\$\{HOME\})/\.claude/skills/(" + "|".join(map(re.escape, skills)) + r")(?![\w-])")
+for md in staging.glob("skills/**/*.md"):
+    text = md.read_text(encoding="utf-8")
+    new = pat.sub(r"${CLAUDE_PLUGIN_ROOT}/skills/\1", text)
+    if new != text:
+        md.write_text(new, encoding="utf-8")
+PYEOF
+
 # --- honor each skill's own .gitignore (structural, not pattern-enumerated) ---
 # The harness copy is staged with a plain cp -R, which is not git-aware: runtime
 # output a skill gitignores locally (e.g. skill-comply results/*.md, which carry

@@ -1,6 +1,6 @@
 ---
 name: agent-stocktake
-description: "Audit ~/.claude/agents/*.md (subagent definitions) for description-layer residency cost, body-layer quality, suppression instructions, staleness, and substrate absorption, assigning Keep/Improve/Update/Merge/Demote-to-skill/Dissolve/Retire verdicts. Use when the user says \"audit my agents\", \"agent stocktake\", \"which agents should I retire or merge\", 「agent を棚卸しして」「エージェント定義を見直して」, or when the model generation changed and agent bodies written for the previous one may suppress or over-constrain the current one. NOT for — skill quality → skill-stocktake; rules → rules-stocktake; runtime 層との横断照合 → generation-audit; whole-config GC → config-gc."
+description: "Audit ~/.claude/agents/*.md (subagent definitions) for description-layer residency cost, body-layer quality, suppression instructions, staleness, and substrate absorption, assigning Keep/Improve/Update/Merge/Demote-to-skill/Dissolve/Retire verdicts. Use when the user says \"audit my agents\", \"agent stocktake\", \"which agents should I retire or merge\", \"take stock of my agents\", \"review my agent definitions\", or when the model generation changed and agent bodies written for the previous one may suppress or over-constrain the current one. NOT for — skill quality → skill-stocktake; rules → rules-stocktake; cross-checking against the runtime layer → generation-audit; whole-config GC → config-gc."
 license: MIT
 metadata:
   author: shimo4228
@@ -40,7 +40,7 @@ this skill exists as a third sibling next to skill-stocktake and rules-stocktake
 
 `changed` detects changes inline (no script):
 ```bash
-find ~/.claude/agents -name "*.md" -newermt "$(jq -r .evaluated_at ~/.claude/skills/agent-stocktake/results.json)"
+find ~/.claude/agents -name "*.md" -newermt "$(jq -r .evaluated_at ${CLAUDE_PLUGIN_ROOT}/skills/agent-stocktake/results.json)"
 ```
 
 As in rules-stocktake, the Phase 1 integrity checks **always run over the full set** —
@@ -55,8 +55,8 @@ would give wrong numbers rather than fewer ones.
 ### Step 1 — Run the evidence script (do not count by hand)
 
 ```bash
-uv run --project ~/.claude/skills/agent-stocktake \
-       --directory ~/.claude/skills/agent-stocktake \
+uv run --frozen --project ${CLAUDE_PLUGIN_ROOT}/skills/agent-stocktake \
+       --directory ${CLAUDE_PLUGIN_ROOT}/skills/agent-stocktake \
        python scripts/agent_evidence.py --root ~/.claude
 ```
 
@@ -78,7 +78,7 @@ corpus is unreadable). It measures and enumerates; it never assigns a verdict.
 
 The last two are **candidates, not findings** — read every cited line before writing it up. The catalog is also a **floor, not a
 census**: it holds five phrasings drawn from one corpus, so a suppression written
-some other way ("skip anything you're unsure about", 「ノイズになる指摘は避ける」)
+some other way ("skip anything you're unsure about", "avoid findings that would just be noise")
 appears in no JSON field. Keep reading for those; an empty list is not a clean bill.
 
 For the measured false-positive ratios and which lines produced them, see
@@ -147,7 +147,7 @@ rest the **body layer** (invocation):
 - [ ] *Body free of suppression instructions?* — start from this agent's
   `suppression_candidates` in the Phase 1 JSON, handled per Step 1.
   What counts: confidence thresholds ("only report findings you are ≥N% sure of",
-  「確信度を付け、低いものは捨てる」), severity floors ("only high-severity"), "be
+  "assign each finding a confidence and discard the low ones"), severity floors ("only high-severity"), "be
   conservative" framings. The current-generation guidance is: report everything,
   filter in a separate pass — a suppression instruction is followed literally and
   silently drops findings. A No here is an **Improve-by-inversion** candidate:
