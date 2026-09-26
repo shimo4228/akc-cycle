@@ -3,7 +3,7 @@
 # (~/.claude) into this repo.
 #
 # akc-cycle variant: publishes the fixed AKC-cycle plugin payload — the
-# nine cycle-phase skills — so this repo
+# ten cycle-phase skills plus seven AKC-grounded companion skills — so this repo
 # doubles as a Claude Code plugin (see .claude-plugin/). The rules file
 # (rules/common/akc-cycle.md) is NOT synced: since 2026-09-01 it is the
 # self-contained edition owned by this repo, distinct from the pointer
@@ -31,7 +31,9 @@ TARGET_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # the fixed published set (allowlist), relative to harness root / repo root
 SKILLS=(search-first learn-eval skill-stocktake skill-health rules-stocktake
-        rules-distill skill-comply context-sync repo-asset-stocktake)
+        agent-stocktake rules-distill skill-comply context-sync repo-asset-stocktake
+        generation-audit adr-writer harness-boundary review-to-lint llm-as-judge
+        author-calibrated-eval jev-judgment-design)
 SUBTREES=(skills)
 
 DRY_RUN=0

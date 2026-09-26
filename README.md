@@ -5,7 +5,7 @@
 The install entry point for the [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) — six phases (Research, Extract, Curate, Promote, Measure, Maintain) plus Scaffold Dissolution. Two install paths, minimal to full:
 
 1. **Rules file (minimal, recommended floor)** — a single self-contained behavioral rules file, loaded every session, that distills the cycle into actionable principles an agent can follow through natural conversation, without installing any skills. This edition is owned by this repository.
-2. **Claude Code plugin (skill layer)** — the nine cycle-phase skills, installed via the plugin marketplace.
+2. **Claude Code plugin (skill layer)** — seventeen skills — the ten cycle-phase skills plus seven companion skills grounded in AKC concepts — installed via the plugin marketplace.
 
 ## Install
 
@@ -27,7 +27,7 @@ Any agent harness that loads a rules directory each session works the same way �
 /plugin install akc-cycle@akc-cycle
 ```
 
-Installs nine skills bound to the six phases — `search-first` (Research), `learn-eval` (Extract), `skill-stocktake` / `skill-health` / `rules-stocktake` (Curate), `rules-distill` (Promote), `skill-comply` (Measure), `context-sync` / `repo-asset-stocktake` (Maintain).
+Installs seventeen skills. Ten are bound to the six phases — `search-first` (Research), `learn-eval` (Extract), `skill-stocktake` / `skill-health` / `rules-stocktake` / `agent-stocktake` (Curate), `rules-distill` (Promote), `skill-comply` (Measure), `context-sync` / `repo-asset-stocktake` (Maintain). Seven are companion skills that run AKC concepts rather than a single phase — `generation-audit` (re-audit on a model-generation change, ADR-0023), `harness-boundary` (Scaffold Dissolution at design time), `adr-writer` (expiry-conditioned decisions, ADR-0026), `review-to-lint` (code-LLM layering, ADR-0008), `llm-as-judge` / `jev-judgment-design` (the judge pattern, ADR-0008), `author-calibrated-eval` (intent alignment).
 
 > **Note**: Claude Code plugins cannot ship always-loaded rules, so the plugin does **not** include the rules file. The rules file (Path 1) is the cycle's floor; the plugin adds the deeper how-to layer on top. The skills are scaffolding by design — see Scaffold Dissolution below.
 
@@ -48,7 +48,7 @@ It closes with **Scaffold Dissolution**: these rules are scaffolding, and succes
 
 ## Syncing from the harness
 
-The canonical copies of the skill-layer components — the nine skills — live in the author's live Claude Code harness (`~/.claude/`). This repository is a one-way publication mirror for those; the sync script publishes a fixed allowlist and aborts if any listed component is missing or lacks its origin marker. The rules file is **not** synced: this repo owns the self-contained edition, while the harness runs the pointer edition (two deliberately different files since 2026-09-01):
+The canonical copies of the skill-layer components — the seventeen skills — live in the author's live Claude Code harness (`~/.claude/`). This repository is a one-way publication mirror for those; the sync script publishes a fixed allowlist and aborts if any listed component is missing or lacks its origin marker. The rules file is **not** synced: this repo owns the self-contained edition, while the harness runs the pointer edition (two deliberately different files since 2026-09-01):
 
 ```bash
 scripts/sync-from-local.sh --dry-run   # report differences only
