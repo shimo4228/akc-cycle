@@ -505,10 +505,12 @@ def _warn_unreachable_detectors(spec: ComplianceSpec, args: argparse.Namespace) 
         detail = ", ".join(f"{tool} x{n}" for tool, n in sorted(unreachable.items()))
         progress(
             f"[warn] the child lacks tools that detectors require: {detail}. "
-            "Those steps score 0% as \"could not be observed\", not as \"was not done\""
+            'Those steps score 0% as "could not be observed", not as "was not done"'
         )
         if "Bash" in unreachable:
-            progress("       If Bash is needed, pass --allow-bash explicitly (off by default by design)")
+            progress(
+                "       If Bash is needed, pass --allow-bash explicitly (off by default by design)"
+            )
 
 
 def _print_dry_run(spec: ComplianceSpec, scenarios: list[Scenario]) -> None:
