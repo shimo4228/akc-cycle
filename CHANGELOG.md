@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.2] — 2026-09-26
+
+### Changed
+
+- `.claude-plugin/plugin.json` — sets `icon` to `./.claude-plugin/icon.png`. The directory's "No icon" check reads only this field; a file at the default path was not enough. Version `1.4.2`.
+- `.claude-plugin/icon.png` replaces `.claude-plugin/icon.svg`. It is the same artwork as a plain 512×512 PNG, the size the check names, instead of a JPEG embedded in an SVG wrapper.
+
 ## [1.4.1] — 2026-09-26
 
 Fixes from the Claude directory validation report, and the payload is now English throughout.
