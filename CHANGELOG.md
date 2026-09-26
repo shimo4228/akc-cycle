@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2026-09-26
+
+The plugin grows from nine to seventeen skills, ahead of the Claude directory submission: the Curate skill the AKC phase table already listed, plus the harness skills AKC v2.8.0 and its follow-up placement grounded on AKC concepts.
+
+### Added
+
+- `skills/agent-stocktake` — Curate: the audit for `~/.claude/agents/`, third sibling of skill-stocktake and rules-stocktake (already in AKC's phase table; missing from the payload until now).
+- `skills/generation-audit` — re-audits rules and skills when a new model generation takes a role (AKC ADR-0023). rules-stocktake and skill-stocktake already named it as their evidence source.
+- `skills/adr-writer` — expiry-conditioned knowledge (AKC ADR-0026). context-sync already delegated ADR extraction to it.
+- `skills/harness-boundary` — Scaffold Dissolution at design time.
+- `skills/review-to-lint` — code-LLM layering (AKC ADR-0008): machine-decidable reviewer items move to a deterministic script.
+- `skills/llm-as-judge`, `skills/jev-judgment-design` — the judge pattern (AKC ADR-0008).
+- `skills/author-calibrated-eval` — intent alignment: the author's blind reading decides what is worth reading.
+
+### Changed
+
+- `skills/` — the nine existing skills synced from the harness canonical (via the public [claude-harness](https://github.com/shimo4228/claude-harness) mirror, 2026-09-26): search-first adopts an established candidate that matches the need by default and closes with a per-need Adopt / Adopt-part / Build verdict; learn-eval cites the measurement by ADR instead of inlining it; context-sync, rules-stocktake, skill-comply, and skill-stocktake carry their current upstream text.
+- `scripts/sync-from-local.sh` — the allowlist grows to 17 skills.
+- `.claude-plugin/plugin.json` — version `1.4.0`; description names the companion skills. `.claude-plugin/marketplace.json` description updated to match.
+- `README.md` / `llms.txt` / `llms-full.txt` — describe the payload as ten cycle-phase skills plus seven companions.
+
 ## [1.3.0] — 2026-09-19
 
 The plugin payload shrinks to the nine cycle-phase skills. Both bundled subagents were retired in the author's harness, and the skills that used to call them now do that work in the main loop — no skill in the payload invokes a subagent that is no longer shipped.
