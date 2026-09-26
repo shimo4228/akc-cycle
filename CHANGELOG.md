@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 Fixes from the Claude directory validation report, and the payload is now English throughout.
 
+### Added
+
+- `.claude-plugin/icon.svg` — the plugin icon (directory check: no icon): a layered cut-paper spiral of six warm paper layers, one per cycle phase. 512×512, a JPEG embedded in an SVG wrapper so the paper texture survives.
+
 ### Changed
 
 - `skills/` — the Japanese prose in the skills is translated into English: every SKILL.md (descriptions and trigger phrases included), adr-writer's `references/review-findings.md`, the pyproject comments, script docstrings and comments, and skill-comply's progress output. Japanese that scripts match against stays: regexes, test fixtures, and generation-audit's `runtime 照合: 編集 N 件` commit marker, which a harness ADR counts verbatim. The same edits are applied to the harness canonical, so later syncs keep them.
