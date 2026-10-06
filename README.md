@@ -59,6 +59,11 @@ scripts/sync-from-local.sh             # apply to working tree (never commits)
 
 This repository belongs to the [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle) research line — a Zenodo-citable six-phase bidirectional growth loop ([DOI 10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726)) for sustaining intent alignment between an AI agent and its operator over time. The AKC repository holds the judgment lineage (ADRs) and the concept-level knowledge graph; this repository is the cycle's **install target** — the rules file plus the skill-layer plugin. Each cycle skill also has its own standalone repository under [@shimo4228](https://github.com/shimo4228). AKC is one of three research lines by [@shimo4228](https://github.com/shimo4228), alongside [Contemplative Agent](https://github.com/shimo4228/contemplative-agent) ([DOI 10.5281/zenodo.19212118](https://doi.org/10.5281/zenodo.19212118)) — autonomous agents grounded in four contemplative axioms — and [Agent Attribution Practice (AAP)](https://github.com/shimo4228/agent-attribution-practice) ([DOI 10.5281/zenodo.19652013](https://doi.org/10.5281/zenodo.19652013)) — harness-neutral ADRs on accountability distribution.
 
+## More from the author
+
+- **[harness-scope](https://github.com/shimo4228/harness-scope)**: a Claude Code Mod that turns your global skills, agents, rules and tools on or off per repo with named profiles.
+- **[claude-harness](https://github.com/shimo4228/claude-harness)**: the author's live harness (rules, skills, agents), where the pointer edition of the rules file lives.
+
 ## License
 
 MIT
