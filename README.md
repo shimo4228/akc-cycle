@@ -47,31 +47,45 @@ What the plugin adds and runs:
 
 ## What each phase does
 
-The rules file describes each phase as a habit with a trigger. Under each phase name are the plugin's skills for it.
+The rules file describes each phase as a habit with a trigger:
 
-| Phase and skills | When it applies, and what the agent does |
+| Phase | When it applies, and what the agent does |
 |---|---|
-| **Research**<br>`search-first` | Before adding a dependency or writing a utility that may already exist: searches outside the repo first and reports what it found. |
-| **Extract**<br>`learn-eval` | After a productive session or a hard debugging fix: decides whether the lesson is worth keeping and where it should go. |
-| **Curate**<br>`skill-stocktake`<br>`skill-health`<br>`rules-stocktake`<br>`agent-stocktake` | When skills, rules or agents have grown, or a reference breaks: finds duplicates, stale entries and entries that never fire. |
-| **Promote**<br>`rules-distill` | When the same advice keeps coming back: turns it into a standing rule, with the reason. |
-| **Measure**<br>`skill-comply` | After adding or changing a rule: checks that the agent now behaves differently. |
-| **Maintain**<br>`context-sync`<br>`repo-asset-stocktake` | After a large refactor, or when context files bloat: keeps one home per fact and pointers elsewhere. |
+| **Research** | Before adding a dependency or writing a utility that may already exist: searches outside the repo first and reports what it found. |
+| **Extract** | After a productive session or a hard debugging fix: decides whether the lesson is worth keeping and where it should go. |
+| **Curate** | When skills, rules or agents have grown, or a reference breaks: finds duplicates, stale entries and entries that never fire. |
+| **Promote** | When the same advice keeps coming back: turns it into a standing rule, with the reason. |
+| **Measure** | After adding or changing a rule: checks that the agent now behaves differently. |
+| **Maintain** | After a large refactor, or when context files bloat: keeps one home per fact and pointers elsewhere. |
 
 The rules file also says when to delete a rule: once the habit runs without it, or once the model does the job well unprompted.
 
-The plugin also has companion skills. Each one puts an AKC idea to work outside the phase procedures above:
+The plugin's skills, by phase:
 
-- `skill-creator`: writes or revises a skill; a reviewer that has not seen your conversation checks the draft, and you sign off. It installs as `/akc-cycle:skill-creator`, next to any other skill-creator you have.
-- `generation-audit`: re-checks your rules and skills when a new Claude model takes over a role.
-- `harness-boundary`: before you add a rule, skill or hook, asks which layer it belongs in and whether the next model will make it unnecessary.
-- `adr-writer`: records a design decision together with the conditions for revisiting it.
-- `review-to-lint`: moves the mechanical items of a review checklist into a script.
-- `llm-as-judge`: designs LLM judges that give one named verdict instead of a summed score.
-- `jev-judgment-design`: for users of TypeSafe's Jev library, moves yes/no judgments an LLM used to make (is this source relevant, is it new) into Jev, with code deciding.
-- `author-calibrated-eval`: tunes LLM-written prose against your own blind reading.
-- `verify-bootstrap`: sets up a repo's format, lint, type, security and test gates behind one script. In an existing repo it fixes the current violations before it makes the rules blocking.
-- `measurement-discipline`: checks a threshold, an experiment result or an observation period before you rely on it.
+- **Research**
+  - `search-first`: searches the web, package registries and primary sources before you decide, and reports what it found.
+- **Extract**
+  - `learn-eval`: judges whether a session's lesson is worth keeping and routes it into an existing skill, rule or doc, or into a new skill.
+  - `skill-creator`: writes or revises a skill; a reviewer that has not seen your conversation checks the draft, and you sign off. It installs as `/akc-cycle:skill-creator`, next to any other skill-creator you have.
+- **Curate**
+  - `skill-stocktake`, `rules-stocktake`, `agent-stocktake`: audit your skills, always-loaded rules and agent definitions, with a verdict for each file.
+  - `skill-health`: finds structural debt in the skill library, such as a skill that names a script or another skill that does not exist.
+  - `generation-audit`: re-checks your rules and skills when a new Claude model takes over a role.
+  - `harness-boundary`: reviews a rule, skill or hook, before you add it or once the setup has grown, by asking which layer it belongs in and whether the next model will make it unnecessary; it can answer keep, simplify or delete.
+- **Promote**
+  - `rules-distill`: finds principles that recur across skills and drafts them as always-loaded rules.
+  - `review-to-lint`: moves the mechanical items of a review checklist into a script.
+- **Measure**
+  - `skill-comply`: runs scenarios and reports how often a skill or rule is actually followed.
+  - `measurement-discipline`: checks a threshold, an experiment result or an observation period before you rely on it.
+  - `llm-as-judge`: designs LLM judges that give one named verdict instead of a summed score.
+  - `author-calibrated-eval`: tunes LLM-written prose against your own blind reading.
+  - `jev-judgment-design`: for users of TypeSafe's Jev library, moves yes/no judgments an LLM used to make (is this source relevant, is it new) into Jev, with code deciding, and checks every run against sources that must pass.
+- **Maintain**
+  - `context-sync`: finds overlapping and stale project docs and moves each fact to one home.
+  - `repo-asset-stocktake`: finds configs, workflows and docs that nothing uses anymore.
+  - `adr-writer`: records a design decision together with the conditions for revisiting it.
+  - `verify-bootstrap`: sets up a repo's format, lint, type, security and test gates behind one script, or audits whether existing gates have gone stale. In an existing repo it fixes the current violations before it makes the rules blocking.
 
 ## How to cite
 
@@ -99,7 +113,7 @@ MIT
 
 **Two editions of the rules file.** This repository owns the self-contained edition, which assumes no skills. The author's harness runs a separate pointer edition that hands each mechanism to an installed skill or rule ([claude-harness `rules/common/akc-cycle.md`](https://github.com/shimo4228/claude-harness/blob/main/rules/common/akc-cycle.md)); it is the shape the rules file can shrink to once the plugin is installed. The two files have differed deliberately since 2026-09-01.
 
-**Plugin payload.** Phase skills: `search-first` (Research), `learn-eval` (Extract), `skill-stocktake`, `skill-health`, `rules-stocktake`, `agent-stocktake` (Curate), `rules-distill` (Promote), `skill-comply` (Measure), `context-sync`, `repo-asset-stocktake` (Maintain). Companion skills and the AKC concept each grounds: `skill-creator` (where Extract and Promote hand a new skill, behind a fresh-context draft review and the human's sign-off, ADR-0005), `generation-audit` (re-audit on a model-generation change, ADR-0023), `harness-boundary` (Scaffold Dissolution at design time), `adr-writer` (expiry-conditioned decisions, ADR-0026), `review-to-lint` (code-LLM layering: whatever a script can decide moves out of the LLM reviewer, ADR-0008), `llm-as-judge` and `jev-judgment-design` (the judge pattern: binary checks as evidence and one named verdict instead of a summed score, ADR-0008), `author-calibrated-eval` (intent alignment: the author's own blind reading is the ground truth for LLM-written prose), `verify-bootstrap` (machine gates as the enforcer of LLM-first readability, ADR-0025), `measurement-discipline` (evidence discipline that supports Measure). The repository is its own marketplace (`.claude-plugin/marketplace.json`, source `./`); the version lives in `.claude-plugin/plugin.json` and the history in [CHANGELOG.md](CHANGELOG.md).
+**Plugin payload.** Skills by phase, matching the AKC phase table; the AKC concept a skill also grounds is in parentheses. Research: `search-first`. Extract: `learn-eval`; `skill-creator` (where Extract and Promote hand a new skill, behind a fresh-context draft review and the human's sign-off, ADR-0005). Curate: `skill-stocktake`, `skill-health`, `rules-stocktake`, `agent-stocktake`; `generation-audit` (re-audit on a model-generation change, ADR-0023); `harness-boundary` (Scaffold Dissolution at design time). Promote: `rules-distill`; `review-to-lint` (code-LLM layering, ADR-0008: code owns what is deterministic and an LLM owns meaning, so whatever a script can decide moves out of the LLM reviewer). Measure: `skill-comply`; `measurement-discipline` (evidence discipline for measured claims, thresholds and observation windows); `llm-as-judge` and `jev-judgment-design` (the judge pattern of the same code-LLM layering, ADR-0008: an LLM or Jev judges and code enforces; llm-as-judge's own design adds binary checks as evidence and one named verdict instead of a summed score); `author-calibrated-eval` (intent alignment: the author's own blind reading is the ground truth for LLM-written prose). Maintain: `context-sync`, `repo-asset-stocktake`; `adr-writer` (expiry-conditioned decisions, ADR-0026); `verify-bootstrap` (machine gates as the enforcer of LLM-first readability, ADR-0025). The repository is its own marketplace (`.claude-plugin/marketplace.json`, source `./`); the version lives in `.claude-plugin/plugin.json` and the history in [CHANGELOG.md](CHANGELOG.md).
 
 **Sync model.** The canonical copies of the plugin skills live in the author's Claude Code harness (`~/.claude/`). This repository is a one-way mirror of them: `scripts/sync-from-local.sh` publishes a fixed allowlist, aborts if a listed skill is missing or lacks its `origin` marker, and never commits (`--dry-run` reports differences only). The rules file is not synced.
 
