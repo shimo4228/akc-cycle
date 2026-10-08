@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- `README.md` — a "Single skills" section under Install points to the standalone repositories of the skills that have one, with the install command and the pairings they need (`skill-stocktake` and `skill-health` run each other's scripts; `generation-audit` runs `skill-health`'s scanner). The collapsed payload paragraph keeps only the AKC concept grounding instead of repeating the visible phase list. `llms-full.txt` matches.
+
 ## [1.5.0] — 2026-10-08
 
 Three harness skills join the plugin payload, every skill is grouped under one of the six phases, and the payload stops naming skills it does not ship.
