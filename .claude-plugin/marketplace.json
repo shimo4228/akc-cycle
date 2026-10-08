@@ -8,7 +8,7 @@
     {
       "name": "akc-cycle",
       "source": "./",
-      "description": "The AKC skill layer — cycle-phase skills plus companion skills grounded in AKC concepts. Pair with the copy-installed rules file for the full cycle."
+      "description": "The AKC skill layer — skills for each of the six cycle phases, grouped as in AKC's phase table. Pair with the copy-installed rules file for the full cycle."
     }
   ]
 }

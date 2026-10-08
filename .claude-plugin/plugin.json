@@ -1,6 +1,6 @@
 {
   "name": "akc-cycle",
-  "description": "Agent Knowledge Cycle (AKC) skill layer — the cycle-phase skills (Research / Extract / Curate / Promote / Measure / Maintain) plus companion skills grounded in AKC concepts (generation audit, scaffold dissolution, ADRs with review-when, review-to-lint, LLM-as-judge, author-calibrated eval, skill creation with a draft gate, machine verification gates, measurement discipline). The always-loaded rules-file floor (rules/common/akc-cycle.md) is not part of the plugin; copy it into your rules directory separately.",
+  "description": "Agent Knowledge Cycle (AKC) skill layer — skills for each of the six cycle phases (Research / Extract / Curate / Promote / Measure / Maintain): searching before building, keeping session lessons and turning them into skills with a draft gate, auditing skills, rules and agents (including a re-audit when a new model generation ships), promoting recurring advice into rules and reviewer items into lint, measuring whether rules are followed, designing LLM judges and keeping measured claims honest, and keeping docs, ADRs with review-when, and machine verification gates in shape. The always-loaded rules-file floor (rules/common/akc-cycle.md) is not part of the plugin; copy it into your rules directory separately.",
   "icon": "./.claude-plugin/icon.png",
   "version": "1.5.0",
   "author": {

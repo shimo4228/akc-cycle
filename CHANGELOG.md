@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [1.5.0] — Unreleased
 
-Three harness skills join the plugin payload as companions, and the payload stops naming skills it does not ship.
+Three harness skills join the plugin payload, every skill is grouped under one of the six phases, and the payload stops naming skills it does not ship.
 
 ### Added
 
@@ -19,8 +19,10 @@ Three harness skills join the plugin payload as companions, and the payload stop
 - `skills/` — the three new skills are translated into English; the harness canonical is translated too, so later syncs keep them. Their Japanese trigger phrases stay in the descriptions as quoted examples next to English equivalents.
 - `skills/` — references to skills that are not in the plugin (the author's README, release, sync, task-ledger, plan and implementation-workflow skills, and the build-or-not and loop-design reviewers) now name the role first and the author's skill as an example, so they read correctly with or without the author's harness. Relative links to the author's harness ADRs now point at the public [claude-harness](https://github.com/shimo4228/claude-harness) copies.
 - `scripts/sync-from-local.sh` — the allowlist adds the three skills.
-- `.claude-plugin/plugin.json` — version `1.5.0`; the description names the new companions and no longer states a skill count. `.claude-plugin/marketplace.json` description updated to match.
-- `README.md` / `llms.txt` / `llms-full.txt` — list the new companions and drop the skill counts, which drifted on every payload change.
+- Skill grouping — the former companion skills are now listed under the phase they serve, following AKC's phase table: `skill-creator` (Extract); `generation-audit`, `harness-boundary` (Curate); `review-to-lint` (Promote); `measurement-discipline`, `llm-as-judge`, `author-calibrated-eval`, `jev-judgment-design` (Measure); `adr-writer`, `verify-bootstrap` (Maintain). The AKC concept each one grounds is kept in `llms.txt` / `llms-full.txt` and the README's collapsed section.
+- `.claude-plugin/plugin.json` — version `1.5.0`; the description describes the skills by phase and no longer states a skill count. `.claude-plugin/marketplace.json` description updated to match.
+- `README.md` — rewritten: a visible start (what it does, install with a `curl` one-liner for the rules file, what the plugin adds and runs, phases and their skills, how to cite AKC) and a collapsed section for tools and AI assistants (two layers, Scaffold Dissolution, editions, payload, sync model). Skill counts are dropped; they drifted on every payload change.
+- `llms.txt` / `llms-full.txt` — follow the README: rules file installed to `~/.claude/rules/`, the phase grouping, the skills that run only when called by name, and a dated claim that plugins have no slot for always-loaded rules.
 
 ## [1.4.2] — 2026-09-26
 
