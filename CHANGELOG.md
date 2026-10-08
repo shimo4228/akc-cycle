@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] — Unreleased
+
+Three harness skills join the plugin payload as companions, and the payload stops naming skills it does not ship.
+
+### Added
+
+- `skills/skill-creator` — the Extract → Promote destination: fixes the intent in one packet, draws the boundary against neighbouring skills, and closes with a fresh-context draft gate and the author's sign-off (AKC ADR-0005). Ten payload skills already handed off to it by name.
+- `skills/verify-bootstrap` — sets up or audits a repo's machine gates (format / lint / type / security / dependency audit / test) behind one `.claude/verify.sh` contract: machine gates, not human eyes, enforce the standard (AKC ADR-0025). Generated gates pin the version of any tool run on demand.
+- `skills/measurement-discipline` — nine principles for measured claims, thresholds, guards and observation windows, each with the measurement it came from (Measure).
+
+### Changed
+
+- `skills/` — the three new skills are translated into English; the harness canonical is translated too, so later syncs keep them. Their Japanese trigger phrases stay in the descriptions as quoted examples next to English equivalents.
+- `skills/` — references to skills that are not in the plugin (the author's README, release, sync, task-ledger, plan and implementation-workflow skills, and the build-or-not and loop-design reviewers) now name the role first and the author's skill as an example, so they read correctly with or without the author's harness. Relative links to the author's harness ADRs now point at the public [claude-harness](https://github.com/shimo4228/claude-harness) copies.
+- `scripts/sync-from-local.sh` — the allowlist adds the three skills.
+- `.claude-plugin/plugin.json` — version `1.5.0`; the description names the new companions and no longer states a skill count. `.claude-plugin/marketplace.json` description updated to match.
+- `README.md` / `llms.txt` / `llms-full.txt` — list the new companions and drop the skill counts, which drifted on every payload change.
+
 ## [1.4.2] — 2026-09-26
 
 ### Changed

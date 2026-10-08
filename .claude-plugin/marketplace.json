@@ -8,7 +8,7 @@
     {
       "name": "akc-cycle",
       "source": "./",
-      "description": "Seventeen AKC skills — ten cycle-phase skills plus seven concept companions. Pair with the copy-installed rules file for the full cycle."
+      "description": "The AKC skill layer — cycle-phase skills plus companion skills grounded in AKC concepts. Pair with the copy-installed rules file for the full cycle."
     }
   ]
 }

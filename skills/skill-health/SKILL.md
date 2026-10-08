@@ -92,7 +92,7 @@ resolved path, and the line. Do not auto-fix — a dangling reference may mean t
 artifact was deleted (remove the reference) **or** renamed (repoint it) **or**,
 for a `../`-escaping link, that the skill was authored in a repo and vendored
 into the harness (a portability issue per
-`~/.claude/skills/skill-creator/references/portability.md`). The
+`${CLAUDE_PLUGIN_ROOT}/skills/skill-creator/references/portability.md`). The
 repair is a human judgment; surface the fact, let the user decide.
 
 ## Phase 3 — Federate the other three dimensions (read, don't re-implement)
@@ -159,4 +159,4 @@ next run can diff. Update it inline with Read/Write.
 
 ## Related
 
-- `harness-sync` — use it to publish this skill to a public repo.
+- Your publish step (the author's harness uses `harness-sync`) — use it to publish this skill to a public repo.
