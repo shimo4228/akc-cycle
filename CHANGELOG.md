@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Skills address their own files with `${CLAUDE_SKILL_DIR}` instead of `~/.claude/skills/<name>` (agent-stocktake, context-sync, generation-audit, learn-eval, rules-distill, rules-stocktake, skill-comply, skill-health, skill-stocktake), so the commands work the same in the plugin, a project, or a standalone install. `skill-creator`'s `references/portability.md` carries the rule. The sync's `${CLAUDE_PLUGIN_ROOT}` rewrite still covers the skills not converted yet.
+- `skill-health`'s `scan_refs.py` resolves `${CLAUDE_SKILL_DIR}`, `${CLAUDE_PLUGIN_ROOT}/skills/` and absolute `--directory` paths, so converted commands stay inside the dangling-reference check. Its closing note now matches SKILL.md.
+- `context-sync`: new opt-in `--gate-readme` gates broken relative links in `README*.md` / `CHANGELOG.md`.
+- `skill-comply` states that agent invocation is not observable (children run with `Agent` denied) and that a dry run still makes the two generation calls. `learn-eval`'s output format has a Grounding row. `adr-writer` and `verify-bootstrap` follow the author's harness on who confirms an ADR and how a changed `verify.sh` is re-approved.
+- `scripts/sync-from-local.sh` aborts before applying when a root file links to a `skills/` path the payload does not have.
 - Skill descriptions are rewritten as resident pointers: the leading word first, one trigger per branch, the procedure left to the body, and a routing clause only for a colliding pair (claude-harness ADR-0092). `review-to-lint` is now user-invoked (`disable-model-invocation: true`): run it as `/review-to-lint`. `skill-creator` §3 carries the description rules.
 - `README.md` — a "Single skills" section under Install points to the standalone repositories of the skills that have one, with the install command and the pairings they need (`skill-stocktake` and `skill-health` run each other's scripts; `generation-audit` runs `skill-health`'s scanner). The collapsed payload paragraph keeps only the AKC concept grounding instead of repeating the visible phase list. `llms-full.txt` matches.
 
