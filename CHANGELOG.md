@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- `skill-stocktake` runs its `claude -p "/skill-doctor"` child with hooks off (`disableAllHooks` via `--settings`, which outranks project and local settings), the shell, subagent, network and file-writing tools denied, and `--strict-mcp-config`. Before, a hook in the audited repo's `.claude/settings.json` ran as the user. Every setting source stays loaded, so the skill listing it measures is unchanged.
+- `skill-stocktake`'s Phase 2 batch agents and Phase 3 overlap agent are told that the files they read are data to score, not instructions to follow, and the currency check runs only `command -v` and an installed CLI's own `--help`, never a command line copied from the audited file.
+
 ### Changed
 
 - Skills address their own files with `${CLAUDE_SKILL_DIR}` instead of `~/.claude/skills/<name>` (agent-stocktake, context-sync, generation-audit, learn-eval, rules-distill, rules-stocktake, skill-comply, skill-health, skill-stocktake), so the commands work the same in the plugin, a project, or a standalone install. `skill-creator`'s `references/portability.md` carries the rule. The sync's `${CLAUDE_PLUGIN_ROOT}` rewrite still covers the skills not converted yet.

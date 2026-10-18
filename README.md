@@ -43,7 +43,7 @@ What the plugin adds and runs:
 - Some skills, `skill-stocktake` among them, run bundled Python scripts with [`uv`](https://docs.astral.sh/uv/) and Python 3.11 or later.
 - The audit skills propose a verdict for each file (such as keep, update, merge, retire or dissolve) and change a file only after you confirm that file.
 - `context-sync` edits existing documentation files without asking and lists every edit at the end, so `git diff` shows what changed; it asks once before creating new files.
-- `skill-comply` and `skill-stocktake` start separate `claude -p` sessions, which use your Claude usage. `skill-stocktake` also checks every URL your skills name, and `search-first` and the audit skills may search the web.
+- `skill-comply` and `skill-stocktake` start separate `claude -p` sessions, which use your Claude usage. Both children run with the shell and subagent tools denied; `skill-stocktake`'s child also runs with hooks off, so a hook in the repo being audited does not run. `skill-stocktake` also checks every URL your skills name, and `search-first` and the audit skills may search the web.
 
 ### Single skills
 
