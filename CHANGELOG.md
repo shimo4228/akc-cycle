@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.2] — 2026-11-01
+
+### Changed
+
+- `skill-creator` is renamed `skill-writer` (`/akc-cycle:skill-writer`), so it no longer shares a name with Anthropic's official skill-creator. It does not replace that skill.
+- `skill-health` and `skill-writer` drop their references to the author's own harness, so they run as installed from the plugin; `context-sync`'s evidence script runs under `python3 -I`; each audit's ledger lives in the audited harness and travels with the apply branch.
+- `harness-stocktake` writes its unverified-runtime mark in the report's language.
+
 ## [1.6.1] — 2026-11-01
 
 `harness-stocktake` can audit the harness inside any repository, and its report no longer depends on the model to write it.

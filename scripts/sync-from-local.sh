@@ -33,7 +33,7 @@ TARGET_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILLS=(search-first learn-eval skill-stocktake skill-health rules-stocktake
         agent-stocktake rules-distill skill-comply context-sync repo-asset-stocktake
         generation-audit adr-writer harness-boundary review-to-lint llm-as-judge
-        author-calibrated-eval jev-judgment-design skill-creator verify-bootstrap
+        author-calibrated-eval jev-judgment-design skill-writer verify-bootstrap
         measurement-discipline harness-stocktake hook-stocktake)
 SUBTREES=(skills)
 
