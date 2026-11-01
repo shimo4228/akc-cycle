@@ -13,6 +13,8 @@ Scan installed skills, find principles that belong in the **always-loaded rules 
 them into rules — appending to, revising, or creating rule files. The skill produces
 candidates and verdicts; it **never edits rules without your approval**.
 
+**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths and names the evidence that is `n/a` there).
+
 ## When to Use
 
 - Periodic rules maintenance (monthly, or after installing new skills)
@@ -23,8 +25,8 @@ candidates and verdicts; it **never edits rules without your approval**.
 
 Enumerate with Glob (no script):
 
-- Skills: `~/.claude/skills/*/SKILL.md`
-- Rules: read every `~/.claude/rules/**/*.md` in full — the corpus is small, so no grep pre-filter is needed
+- Skills: `<harness>/skills/*/SKILL.md`
+- Rules: read every `<harness>/rules/**/*.md` in full — the corpus is small, so no grep pre-filter is needed
 
 > Glob targets only skill definition files, so dependency markdown under `.venv` /
 > `.pytest_cache` is excluded structurally.

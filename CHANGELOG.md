@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.1] — 2026-11-01
+
+`harness-stocktake` can audit the harness inside any repository, and its report no longer depends on the model to write it.
+
+### Added
+
+- `harness-stocktake --project <repo>` audits the harness inside a repository (`.claude/skills`, `.claude/rules`, `.claude/agents`, `.claude/settings.json` hooks, `CLAUDE.md` / `AGENTS.md`, the whole repo for assets) instead of `~/.claude`, judged by the conventions the repo itself states. `--dry-run` stops after the report (no Artifact, branch, worktree, ledger write or notifier), and `--out <dir>` sets the run directory. `scripts/isolated-dry-run.sh <repo> <out-dir>` runs a dry run on someone else's repository with no Bash, settings, MCP servers or the operator's CLAUDE.md.
+- `scripts/render_report.py` assembles `report.md` deterministically from the per-source sections, so a run always ends with a report; the report closes by pointing to `/doctor` and `/doctor prompt-audit` for what they check.
+
+### Changed
+
+- Sources run in parallel, one subagent each, ordered so the sources that most often end in a non-Keep verdict report first. A large skills library is split into batches by count before dispatch, and the same Retire reason across many skills becomes one item.
+- The audits write counts from the search output, check each `file:line` before citing it, search the whole repository before saying something is unused, mark a Claude Code runtime behaviour without a source as unverified, and keep the operator's own skill names out of another repository's report.
+
 ## [1.6.0] — 2026-11-01
 
 Two skills join the payload: `harness-stocktake`, which runs every audit into one report, and `hook-stocktake`. The audit skills move from a `[y/n/skip]` question per verdict to that report: one approval, the changes applied on a git branch, one merge. The CI template no longer forwards a token to a third-party action.

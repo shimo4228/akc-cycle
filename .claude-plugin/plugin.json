@@ -2,7 +2,7 @@
   "name": "akc-cycle",
   "description": "Skills that audit and prune the skills, rules, hooks and docs in your Claude Code setup. Start with /akc-cycle:harness-stocktake: one report, one approval, changes applied on a branch. For the skills alone, run /akc-cycle:skill-stocktake.",
   "icon": "./.claude-plugin/icon.png",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "author": {
     "name": "shimo4228",
     "url": "https://github.com/shimo4228"
