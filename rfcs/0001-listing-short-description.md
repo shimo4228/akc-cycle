@@ -1,5 +1,5 @@
 ---
-state: blocked 2026-10-12
+state: accepted 2026-11-01
 ---
 ## Summary
 
@@ -32,12 +32,17 @@ plugin directory の listing を、入れた人が最初に打つコマンドが
 
 ## Status
 
-blocked — 変更は branch `listing-short-description` に用意済み。v1.5.0 の公開待ち（2026-10-12）。
+accepted（2026-11-01）— v1.6.0 に同梱した。v1.5.0 は directory の policy hold（"Update adds credential forward"）で
+live にならず、再開条件は成立しないまま、hold の原因を直す v1.6.0 に branch `listing-short-description`（34302b0）の
+変更を手で載せた（著者の判断、2026-11-01）。`description` の最初のコマンドは `/akc-cycle:harness-stocktake` にし、
+skill 単体の入口として `/akc-cycle:skill-stocktake` を並べた。push と directory での live 確認が残る。
+
+blocked（2026-10-12）— 変更は branch `listing-short-description` に用意済み。v1.5.0 の公開待ち。
 
 ## Next action
 
 ```
-再開条件: akc-cycle の v1.5.0 が directory で live になる
+完了条件: akc-cycle の v1.6.0 が directory で live になり、short description が新しい 1 行になる
 照合先:   claude.ai/directory/manage の akc-cycle のページの「Live now」欄
-成立時:   accepted（branch を main に入れ、version を上げ、CHANGELOG を書いて push する）
+成立時:   done
 ```

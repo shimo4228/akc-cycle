@@ -1,10 +1,10 @@
 # akc-cycle
 
-akc-cycle keeps the rules and skills in a Claude Code setup from piling up and going stale. Ask Claude to "audit my skills" and it reviews each one, proposes a verdict such as keep, merge or retire with a reason, and changes nothing until you confirm.
+akc-cycle keeps the rules and skills in a Claude Code setup from piling up and going stale. Run `/akc-cycle:harness-stocktake` and it audits your skills, rules, agents, hooks and docs, gathers a verdict for each file, such as keep, merge or retire with a reason, into one report, and changes nothing until you approve that report.
 
 That audit is one of six habits the agent learns: search before building, keep what a session taught, audit what has accumulated, turn advice that keeps coming back into a rule, check that a rule changed behaviour, and keep docs to one home per fact. The agent is also told to delete its own rules once a habit runs without them. akc-cycle is the installable form of the [Agent Knowledge Cycle (AKC)](https://github.com/shimo4228/agent-knowledge-cycle), the author's method for keeping an AI agent aligned with its operator over time. The author's other work is listed under [More from the author](#more-from-the-author).
 
-Listed in the Claude plugin directory (as of 2026-10-08, v1.5.0).
+Listed in the Claude plugin directory (as of 2026-10-08).
 
 ## Install
 
@@ -27,21 +27,21 @@ Claude Code loads every Markdown file under `~/.claude/rules/` in every project.
 /plugin install akc-cycle@akc-cycle
 ```
 
-Then ask in plain words, such as "audit my skills", or call a skill by name, such as `/akc-cycle:skill-stocktake`. `skill-stocktake` answers "audit my skills". Each reason has to stand on its own; two examples from the skill's instructions show the level of detail:
+Then run `/akc-cycle:harness-stocktake` for every audit at once, or call one audit by name, such as `/akc-cycle:skill-stocktake` for the skills alone. Each reason has to stand on its own; two examples from `skill-stocktake`'s instructions show the level of detail:
 
 | Verdict | Reason |
 |---|---|
 | Merge | 42-line thin content; Step 4 of chatlog-to-article already covers this workflow. Integrate the 'article angle' tip there as a note. |
 | Improve | 276 lines; 'Framework Comparison' (L80–140) duplicates ai-era-architecture-principles. Delete it to reach ~150 lines. |
 
-It then goes through each verdict other than Keep, shows the evidence and asks `[y/n/skip]` before it changes anything.
+The verdicts arrive as one report. You change the items you disagree with and approve once; the changes are then applied on a git branch, and you merge it after reading the completion report. In the Claude desktop app the report is an Artifact page where you override items and approve with a button; elsewhere it is a Markdown file with a decision column, and you approve in chat.
 
 What the plugin adds and runs:
 
 - It adds skills only: no hooks, no MCP servers, no settings.
-- Most skills keep their description in context so Claude can pick them from a plain request, about 8,500 characters in all (as of v1.5.0); the full instructions load only when a skill runs. `skill-health`, `agent-stocktake`, `rules-distill`, `generation-audit`, `harness-boundary`, `llm-as-judge` and `author-calibrated-eval` stay out of context and run only when you call them by name. To install only some skills, see [Single skills](#single-skills).
+- The skills Claude can pick from a plain request keep their description in context, about 2,600 characters in all (as of v1.6.0); the full instructions load only when a skill runs. `harness-stocktake`, `hook-stocktake`, `skill-health`, `agent-stocktake`, `rules-distill`, `review-to-lint`, `generation-audit`, `harness-boundary`, `llm-as-judge` and `author-calibrated-eval` stay out of context and run only when you call them by name. To install only some skills, see [Single skills](#single-skills).
 - Some skills, `skill-stocktake` among them, run bundled Python scripts with [`uv`](https://docs.astral.sh/uv/) and Python 3.11 or later.
-- The audit skills propose a verdict for each file (such as keep, update, merge, retire or dissolve) and change a file only after you confirm that file.
+- The audit skills propose a verdict for each file (such as keep, update, merge, retire or dissolve) and change files only after you approve the report. The changes land on a git branch of the audited directory (`~/.claude` for the harness audits), so the apply step needs that directory under git; a file git does not track, such as an untracked `settings.json`, changes only after you merge.
 - `context-sync` edits existing documentation files without asking and lists every edit at the end, so `git diff` shows what changed; it asks once before creating new files.
 - `skill-comply` and `skill-stocktake` start separate `claude -p` sessions, which use your Claude usage. Both children run with the shell and subagent tools denied; `skill-stocktake`'s child also runs with hooks off, so a hook in the repo being audited does not run. `skill-stocktake` also checks every URL your skills name, and `search-first` and the audit skills may search the web.
 
@@ -81,7 +81,8 @@ The plugin's skills, by phase:
   - `learn-eval`: judges whether a session's lesson is worth keeping and routes it into an existing skill, rule or doc, or into a new skill.
   - `skill-creator`: writes or revises a skill; a reviewer that has not seen your conversation checks the draft, and you sign off. It installs as `/akc-cycle:skill-creator`, next to any other skill-creator you have.
 - **Curate**
-  - `skill-stocktake`, `rules-stocktake`, `agent-stocktake`: audit your skills, always-loaded rules and agent definitions, with a verdict for each file.
+  - `harness-stocktake`: runs every audit over `~/.claude` (skills, rules, agents, hooks, rule candidates, docs, unused assets) and gives one report of every audit's verdicts, one approval, applied on a branch.
+  - `skill-stocktake`, `rules-stocktake`, `agent-stocktake`, `hook-stocktake`: audit your skills, always-loaded rules, agent definitions, and hooks with their `settings.json` wiring, with a verdict for each file.
   - `skill-health`: finds structural debt in the skill library, such as a skill that names a script or another skill that does not exist.
   - `generation-audit`: re-checks your rules and skills when a new Claude model takes over a role.
   - `harness-boundary`: reviews a rule, skill or hook, before you add it or once the setup has grown, by asking which layer it belongs in and whether the next model will make it unnecessary; it can answer keep, simplify or delete.

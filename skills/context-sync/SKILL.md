@@ -54,6 +54,8 @@ Run all five phases in order. **Confirmation policy: apply edits to existing fil
 
 The skill runs end-to-end; it pauses only for the Phase 3 creation batch and for ADR inputs it cannot find in the source. Phase 5 (Report) summarizes what was done.
 
+**Run as a harness-stocktake source** (source `docs`, from `/harness-stocktake` over `~/.claude`): run Phases 1, 2 and 4 to find the edits and creations, and emit each one as an item of the report contract in skill `harness-stocktake` (`change` = the edit as a diff, or the new file's path and content) instead of applying it. The report's one approval replaces the Phase 3 creation batch, and the edits apply on the stocktake's task branch. A missing ADR input becomes a pending item.
+
 ### Phase 1: Discover
 
 Scan the project for documentation files and classify them into the four roles.
@@ -231,6 +233,12 @@ duplicating the rule:
 
 - [ ] No generic advice that is not specific to this project (template copy-paste
       without customization)
+- [ ] Directives in context files (CLAUDE.md / AGENTS.md / guideline docs) and in ADR
+      Decision / Review-when / Consequences say what to do by default. A prohibition stays
+      only when it targets a grep-able concrete action, the default behavior was observed to
+      go the other way, no machine gate covers it, and a one-clause reason is attached;
+      reword the rest in the affirmative (a named "don't" is recalled as an option). ADR
+      Context / Alternatives are records and stay as written
 - [ ] `ResearchLine` `@id` uses the concept DOI (parent record), not the latest
       versioned DOI — the script lists every DOI in `graph_jsonld.dois`; which one is
       the concept record is not decidable from the string

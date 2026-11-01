@@ -1,0 +1,6 @@
+# payload の skills/ は harness（~/.claude）の正本を sync で写したもので、harness の ruff.toml
+# （line-length 100）で format 済み。この repo に root 設定が無いと ruff 既定の 88 で判定され、
+# commit 時の format check（hook は root の設定だけを読む）が正本どおりの写しを未 format 扱いにする。
+# sub-project の [tool.ruff] と同じ値に揃える（requires-python >=3.11）。
+target-version = "py311"
+line-length = 100
