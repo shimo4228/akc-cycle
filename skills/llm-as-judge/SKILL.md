@@ -144,8 +144,8 @@ If any dominant No ({domain-specific fatal condition}) is present, choose
 {failing verdict} even when everything else is Yes.
 
 ## Output format
-Return JSON matching the schema below. Where the runtime supports structured outputs
-(`output_config.format`), pass the schema there rather than asking for JSON in prose.
+Return JSON matching the schema below. Where the runtime supports structured outputs,
+hand it the schema there rather than asking for JSON in prose.
 ```
 
 Output schema:
