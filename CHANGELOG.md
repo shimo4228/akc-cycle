@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.3] — 2026-11-02
+
+### Changed
+
+- `learn-eval` runs its overlap script by full path from the repo you are working in, so the command no longer passes `$PWD` (an environment variable whose name reads as "password" to credential scanners). The script finds the same `MEMORY.md` files as before.
+- `llm-as-judge`'s judge prompt template says "where the runtime supports structured outputs" instead of "on the API"; the skill calls no API and reads no key. Both edits answer the Claude plugin directory's "Uses a credential from the user's machine" finding on these two files, which held the update with "Update adds credential forward".
+- `gemini-extension.json` carries the same version as `plugin.json` again (it had stayed at 1.6.0).
+
 ## [1.6.2] — 2026-11-01
 
 ### Changed
