@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.5] — 2026-11-03
+
+### Changed
+
+- `plugin.json` drops its URL fields (`author.url`, `homepage`, `repository`, `documentationUrl`, `supportUrl`), and `gemini-extension.json` drops the repository link from its description. The plugin directory reads these fields only at first submission, so the listing is unchanged; the repository is still named in the README.
+
 ## [1.6.4] — 2026-11-02
 
 ### Changed
