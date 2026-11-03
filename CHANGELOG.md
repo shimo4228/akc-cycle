@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.6] — 2026-11-04
+
+### Changed
+
+- `harness-stocktake` picks its report form by whether the session has the Artifact tool, the same in `~/.claude` and in project mode, so a project-mode run in the desktop app also gets the Artifact page.
+- `harness-stocktake`'s Artifact page shows its own text in English or Japanese, following `--lang`, and its title comes from the report's first line.
+- `harness-stocktake`'s verdict choices no longer list Keep or the recommended verdict twice.
+- `harness-stocktake`'s `report.md` under `--lang ja` gives its override instructions in Japanese.
+
 ## [1.6.5] — 2026-11-03
 
 ### Changed
