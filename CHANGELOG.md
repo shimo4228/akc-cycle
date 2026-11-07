@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.8.0] — 2026-11-08
+
+### Removed
+
+- `measurement-discipline` leaves the plugin. Its general rules are ordinary statistics a current model applies without a skill; the traps measured in one project's instruments moved to that project.
+
 ## [1.7.0] — 2026-11-08
 
 ### Changed

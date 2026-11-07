@@ -34,7 +34,7 @@ SKILLS=(search-first learn-eval skill-stocktake skill-health rules-stocktake
         agent-stocktake rules-distill skill-comply context-sync repo-asset-stocktake
         generation-audit decision-history harness-boundary review-to-lint llm-as-judge
         author-calibrated-eval jev-judgment-design skill-writer verify-bootstrap
-        measurement-discipline harness-stocktake hook-stocktake)
+        harness-stocktake hook-stocktake)
 SUBTREES=(skills)
 
 DRY_RUN=0
