@@ -164,7 +164,7 @@ def test_missing_section_and_case_mismatch(tmp_path: Path) -> None:
     assert any("missing section '## Alternatives Considered'" in line for line in v)
 
 
-def test_status_prefix_judgment_allows_prose_suffix(tmp_path: Path) -> None:
+def test_status_is_evidence_only(tmp_path: Path) -> None:
     ok_statuses = [
         "accepted — supersedes ADR-0021 の一部",
         "superseded-by 0070",
@@ -187,8 +187,10 @@ def test_status_prefix_judgment_allows_prose_suffix(tmp_path: Path) -> None:
     ev = collect_evidence(root, "docs/adr")
     assert ev is not None
     v = gate_violations(ev, None, None)
-    assert len([line for line in v if "Status" in line]) == 1
-    assert any(f"{bad_num:04d}-bad.md" in line for line in v)
+    # Status is evidence only: no gate line for any Status value, including an unknown one.
+    assert [line for line in v if "Status" in line] == []
+    bad = next(f for f in ev["files"] if f["file"] == f"{bad_num:04d}-bad.md")
+    assert bad["status"]["conforms"] is False
 
 
 def test_date_format_violation(tmp_path: Path) -> None:

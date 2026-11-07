@@ -32,7 +32,7 @@ TARGET_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # the fixed published set (allowlist), relative to harness root / repo root
 SKILLS=(search-first learn-eval skill-stocktake skill-health rules-stocktake
         agent-stocktake rules-distill skill-comply context-sync repo-asset-stocktake
-        generation-audit adr-writer harness-boundary review-to-lint llm-as-judge
+        generation-audit decision-history harness-boundary review-to-lint llm-as-judge
         author-calibrated-eval jev-judgment-design skill-writer verify-bootstrap
         measurement-discipline harness-stocktake hook-stocktake)
 SUBTREES=(skills)

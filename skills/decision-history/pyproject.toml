@@ -1,7 +1,7 @@
 [project]
-name = "adr-writer"
+name = "decision-history"
 version = "0.1.0"
-description = "Deterministic ADR corpus lint (evidence mode + commit gate). Mechanical half of the code/LLM split from harness ADR-0044; the semantic half stays with the adr-reviewer agent."
+description = "Deterministic ADR corpus lint (evidence mode + commit gate). Mechanical half of the code/LLM split from harness ADR-0044; the semantic half stays with the decision-history-reviewer agent."
 requires-python = ">=3.11"
 dependencies = []
 

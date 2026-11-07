@@ -4,7 +4,7 @@ This script owns the *mechanical* half of ADR review (the code side of the
 code/LLM split drawn in ADR-0044: existence = code, content = LLM). It checks
 structure, spelling-level conformance, and cross-file drift; it never judges
 whether a Context is post-hoc rationalization or an Alternatives list is a
-straw man — those stay with the adr-reviewer agent.
+straw man — those stay with the decision-history-reviewer agent.
 
 Two modes:
   default          evidence mode — emit JSON to stdout, exit 0 regardless of
@@ -15,10 +15,15 @@ Two modes:
                    exit 0 when clean, exit 2 when the corpus can't be read.
 
 Template adaptation: the expected section set is parsed from the target
-repo's docs/adr/README.md (first fenced block under "## Template"). Repos
-whose 7th section is "References" instead of "Review-when" (e.g.
+repo's docs/decision-history/README.md (first fenced block under "## Template"). Repos
+whose last section is "References" instead of "Review-when" (e.g.
 contemplative-agent) are checked against their own template, not ours.
-Fallback: the harness 7-section template.
+Fallback: the harness 6-section template (Date / Context / Decision /
+Review-when / Alternatives Considered / Consequences).
+
+Directory resolution: --adr-dir names the directory; when omitted,
+docs/decision-history is used, and docs/adr when only that exists (a repo
+that has not renamed yet).
 
 Exemption boundaries (gate mode; measured against existing corpora so a new
 gate does not turn red on day one):
@@ -26,10 +31,9 @@ gate does not turn red on day one):
                                 numbered >= NNNN (harness: 0044 — exempts
                                 0009's two missing sections)
   --require-review-when-from N  "## Review-when" required from ADR N on
-  Status                        prefix judgment: only the first token must be
-                                in the status vocabulary — trailing prose
-                                ("accepted — supersedes ADR-NNNN") is normal
-                                in both harness and CA corpora
+  Status                        evidence only (entries written before the Status
+                                field was dropped keep it; the token is reported,
+                                never gated)
 """
 
 from __future__ import annotations
@@ -41,7 +45,6 @@ import sys
 from pathlib import Path
 
 DEFAULT_SECTIONS = [
-    "Status",
     "Date",
     "Context",
     "Decision",
@@ -124,7 +127,7 @@ def _headings_and_bodies(lines: list[str]) -> tuple[list[str], dict[str, str]]:
 
 
 def load_template_sections(adr_dir: Path) -> tuple[list[str], str]:
-    """Expected section set from the repo's own docs/adr/README.md template."""
+    """Expected section set from the repo's own docs/decision-history/README.md template."""
     readme = adr_dir / "README.md"
     lines = _read_lines(readme)
     if lines is None:
@@ -349,6 +352,19 @@ def analyze_naming(md_files: list[Path]) -> dict:
     return {"invalid": invalid, "duplicates": duplicates, "gaps": gaps, "numbers": numbers}
 
 
+RECORD_DIRS = ("docs/decision-history", "docs/adr")
+
+
+def resolve_record_dir(root: Path, adr_rel: str | None) -> str:
+    """Pick the record directory: an explicit one, else the first of RECORD_DIRS that exists."""
+    if adr_rel:
+        return adr_rel
+    for rel in RECORD_DIRS:
+        if (root / rel).is_dir():
+            return rel
+    return RECORD_DIRS[0]
+
+
 def collect_evidence(root: Path, adr_rel: str) -> dict | None:
     adr_dir = root / adr_rel
     if not adr_dir.is_dir():
@@ -410,11 +426,6 @@ def gate_violations(
             v.append(
                 f"{f['file']}: missing '## Review-when' (required from {review_when_from:04d})"
             )
-        if f["status"]["conforms"] is False:
-            v.append(
-                f"{f['file']}: Status does not start with a known status word "
-                f"(got '{f['status']['raw']}')"
-            )
         if f["date"]["conforms"] is False:
             v.append(f"{f['file']}: Date is not YYYY-MM-DD (got '{f['date']['raw']}')")
     if not evidence["index"]["present"]:
@@ -429,16 +440,21 @@ def gate_violations(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--root", default=".", help="repo root (default: cwd)")
-    parser.add_argument("--adr-dir", default="docs/adr", help="ADR dir relative to root")
+    parser.add_argument(
+        "--adr-dir",
+        default=None,
+        help="record dir relative to root (default: docs/decision-history, else docs/adr)",
+    )
     parser.add_argument("--gate", action="store_true", help="blocking mode (exit 3 on violations)")
     parser.add_argument("--sections-from", type=int, default=None, metavar="NNNN")
     parser.add_argument("--require-review-when-from", type=int, default=None, metavar="NNNN")
     args = parser.parse_args(argv)
 
     root = Path(args.root).expanduser()
-    evidence = collect_evidence(root, args.adr_dir)
+    adr_rel = resolve_record_dir(root, args.adr_dir)
+    evidence = collect_evidence(root, adr_rel)
     if evidence is None:
-        print(f"adr_lint: {root / args.adr_dir} is not a directory", file=sys.stderr)
+        print(f"adr_lint: {root / adr_rel} is not a directory", file=sys.stderr)
         return 2
 
     if not args.gate:

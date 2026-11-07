@@ -1,8 +1,8 @@
-"""Per-ADR review evidence — the mechanical half of what adr-reviewer kept re-finding.
+"""Per-ADR review evidence — the mechanical half of what decision-history-reviewer kept re-finding.
 
 adr_lint.py owns corpus-wide structure (sections, Status/Date format, index
 drift, naming). This script takes ONE ADR under review and emits the evidence
-the reviewer used to gather by hand on every pass. Source: 24 adr-reviewer
+the reviewer used to gather by hand on every pass. Source: 24 decision-history-reviewer
 reports across 4 repos, 2026-08-26..09-15 (~200 findings, mined 2026-09-16,
 recorded in harness ADR-0071). Classes that recurred in >= 3 reports and were
 adopted by the author became checks here; judgment stays with the reviewer.
@@ -43,7 +43,7 @@ import sys
 from pathlib import Path
 
 # Run as a file (`python3 scripts/adr_review_evidence.py`, the form SKILL.md Step 4.5
-# and agents/adr-reviewer.md name) or imported as `scripts.adr_review_evidence`. Putting
+# and agents/decision-history-reviewer.md name) or imported as `scripts.adr_review_evidence`. Putting
 # the sub-project root on the path makes **one** spelling of the sibling imports correct
 # for both entries — the form `scripts.<name>`, which is also what ty resolves as
 # first-party code.
@@ -71,6 +71,7 @@ from scripts.adr_evidence_prose import (  # noqa: E402
     check_review_when,
     check_second_record,
 )
+from scripts.adr_lint import resolve_record_dir
 
 # Re-exported so the split stays a move of code, not of contract: `check_*` keeps
 # resolving on this module for anyone who addresses the entrypoint (same reason
@@ -337,7 +338,11 @@ def resolve_adr(root: Path, adr_dir_rel: str, adr: str) -> Path | None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--root", default=".", help="repo root (default: cwd)")
-    parser.add_argument("--adr-dir", default="docs/adr", help="ADR dir relative to root")
+    parser.add_argument(
+        "--adr-dir",
+        default=None,
+        help="record dir relative to root (default: docs/decision-history, else docs/adr)",
+    )
     parser.add_argument("--rfc-dir", default="rfcs", help="RFC dir relative to root")
     parser.add_argument("--adr", required=True, help="ADR number (0071) or path")
     parser.add_argument(
@@ -348,7 +353,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     root = Path(args.root).expanduser().resolve()
-    adr_path = resolve_adr(root, args.adr_dir, args.adr)
+    adr_dir_rel = resolve_record_dir(root, args.adr_dir)
+    adr_path = resolve_adr(root, adr_dir_rel, args.adr)
     if adr_path is None:
         print(f"adr_review_evidence: cannot resolve ADR '{args.adr}' under {root}", file=sys.stderr)
         return 2

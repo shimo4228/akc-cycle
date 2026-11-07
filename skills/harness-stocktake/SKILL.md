@@ -66,7 +66,7 @@ The sources read these places in the repo; the global `~/.claude` stays out of s
 | `agents` | `agents/*.md` | `.claude/agents/*.md` |
 | `hooks` | `settings.json` `hooks`, `hooks/*.sh`, `scripts/hooks/*` | `.claude/settings.json` (and a tracked `.claude/settings.local.json`) `hooks`, and every script those commands call |
 | `distill` | skills → rules | `.claude/skills` → `.claude/rules` and `CLAUDE.md` |
-| `docs` | `CLAUDE.md`, `docs/adr/`, `README.md` | `CLAUDE.md` or `.claude/CLAUDE.md`, `AGENTS.md`, the ADR directory if any, `README.md` |
+| `docs` | `CLAUDE.md`, `docs/decision-history/`, `README.md` | `CLAUDE.md` or `.claude/CLAUDE.md`, `AGENTS.md`, the ADR directory if any, `README.md` |
 | `assets` | harness configs and scripts | the whole repo |
 
 - Each source runs its full mode. Its ledger is the project's own (`<ledger>` in the source's Roots
@@ -314,8 +314,8 @@ ends in its own commit. For each item:
      Read and run its **report path** with the item's `change` as the intent packet; otherwise edit
      the SKILL.md from the intent packet directly, keeping its frontmatter
    - Retire / Dissolve: delete the way the source skill says (`git rm` for skills, rules, agents
-     and hooks; soft-delete for repo-asset-stocktake), plus the pointer fixes in `change`; for
-     Dissolve, record why the way the repo records decisions (an ADR via skill `adr-writer` when
+     and hooks, and for repo-asset-stocktake assets), plus the pointer fixes in `change`; for
+     Dissolve, record why the way the repo records decisions (an entry via skill `decision-history` when
      the setup has it, else a Context / Decision paragraph in the commit body)
    - a target git does not track (in `~/.claude`, `settings.json`, which wires the hooks): prepare the exact diff
      now, keep the file unchanged, outcome `pending` with the note "after merge"
@@ -341,8 +341,9 @@ author's GO covers exactly what this reply shows.
 
 On the author's GO:
 
-1. When the default branch moved since the branch was cut, rebase onto it, re-run verify, and
-   report again before going on.
+1. When the default branch moved since the branch was cut, rebase onto it and re-run verify. A
+   rebase without conflicts that passes verify goes straight on; one that needed conflicts
+   resolved or fails verify stops here and is reported.
 2. `git -C <repo> merge --ff-only stocktake/<date>` on the default branch.
 3. Remove the worktree.
 4. Apply the "after merge" items: copy each untracked target to

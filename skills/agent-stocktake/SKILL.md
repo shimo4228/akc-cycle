@@ -120,7 +120,7 @@ never trust figures written in docs, including this one.
 
 ### Step 5 — Usage counts
 
-Evidence input, never a verdict trigger. When the setup keeps an agent usage log
+Evidence input: low usage nominates a candidate, and the content decides the verdict. When the setup keeps an agent usage log
 (`<harness>/metrics/agent-usage.jsonl`; absent = usage `n/a`), read it
 inline (a usage-logging hook such as `log-agent-usage.sh` appends one `invoke` event per Agent-tool launch,
 keyed by its `agent` field, whose value is the `subagent_type`) and count per-agent events over 7 / 30 / 90 days. Aggregate with a throwaway `python3`/`jq` one-liner.
@@ -129,8 +129,9 @@ keyed by its `agent` field, whose value is the `subagent_type`) and count per-ag
   `—` (unmeasured). **Never render it as 0** — unmeasured and unused are different facts.
 - Counts are **lower bounds**: only Agent (Task) tool launches are captured. Workflow
   `agent()` workers, plugin-internal dispatch, and built-in machinery that bypasses the
-  tool call do not reach the hook. Never Retire/Dissolve on low usage alone — an agent's
-  value can be episodic (e.g. paper reviewers fire only near a deposit).
+  tool call do not reach the hook. A low-usage agent enters Stage 1 as a Retire/Dissolve
+  candidate; its value can be episodic (e.g. paper reviewers fire only near a deposit), so
+  the content decides.
 - Log exists since **2026-07-27**; before that date there is no measurement at all.
 
 State the scan result up front, taking the counts from the Step 1 JSON: `agents_total`
@@ -225,7 +226,7 @@ never a quota.
 | Update | Referenced technology/tool/model is outdated (verified, with evidence) |
 | Merge into [X] | Substantial overlap with another agent; name the target |
 | Demote to skill | The value is the instructions, not the separate context/process — move to the skill layer via skill-writer |
-| Dissolve | Absorbed by the substrate. Retirement by *success* — delete before the stale body overrides newer defaults; record the why in an ADR |
+| Dissolve | Absorbed by the substrate. Retirement by *success* — delete before the stale body overrides newer defaults; record the why in a decision-history entry |
 | Retire | Defect-based removal: low quality, stale, broken beyond repair |
 
 **Mandatory-surface rule**: a No on the absorption question MUST surface the agent as a
@@ -253,7 +254,7 @@ contract's Phases 2–5 with its own items. Each item carries, by verdict:
   deleted or reduced. Application creates the skill through skill-writer's report path
 - **Dissolve / Retire**: `reason` = the absorption evidence or defect and what covers the need
   instead; `impact` = skills and rules that name this agent (grep the harness) and the public
-  repo copy. Application records a Dissolve's why via `adr-writer`
+  repo copy. Application records a Dissolve's why via `decision-history`
 - **Keep**: `reason` only
 
 Where skill `harness-stocktake` is not installed, show the same items as one table ordered
@@ -278,7 +279,7 @@ cite the No answers (question + one-line evidence):
   invert to 'report everything; caller filters in a separate pass'."`
 - **Dissolve**: name the absorber. Bad: `"Not needed"` / Good: `"Harness plan mode +
   Plan agent type now provide native planning delegation; body duplicates and predates
-  it. ADR the why, then delete."`
+  it. Record the why in decision-history, then delete."`
 - **Merge**: name the target + what to integrate.
 - **Keep** (carry-forward in `changed` mode): restate the rationale.
 
@@ -311,7 +312,7 @@ Created on the first run — do not pre-seed. Update inline with Read/Write, not
   collects runtime-layer evidence (conflict / redundancy) and `/claude-api prompt-audit`
   findings, and hands the agents slice to this skill as Stage 2 evidence.
 - `skill-writer` (when installed) — handoff target for the skill-creation half of Demote.
-- `adr-writer` (when installed) — records the why of a Dissolve.
+- `decision-history` (when installed) — records the why of a Dissolve.
 - `harness-boundary` — design-time lens (layer / portability / obsolescence) for proposed
   mechanisms; applied to an installed agent, its Delete / Move are Stage 2 evidence only.
 - Usage measurement: a usage-logging hook writing `<harness>/metrics/agent-usage.jsonl`, when

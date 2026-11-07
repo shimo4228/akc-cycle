@@ -2,9 +2,9 @@
 
 # Catalog of Frequent ADR Review Findings (for write-time prevention; a dated casebook)
 
-Frequent patterns distilled from adr-reviewer's finding history (contemplative-agent git history + harness cases, mined 2026-08-26).
+Frequent patterns distilled from decision-history-reviewer's finding history (contemplative-agent git history + harness cases, mined 2026-08-26).
 **Its role is a casebook for prevention** — the canonical review criteria are
-`~/.claude/agents/adr-reviewer.md`, and the canonical mechanical checks are `scripts/adr_lint.py`. This file
+`~/.claude/agents/decision-history-reviewer.md`, and the canonical mechanical checks are `scripts/adr_lint.py`. This file
 holds only "concrete examples to self-check against before writing" and does not duplicate the criteria.
 
 Read each case as a dated hypothesis with a commit reference.
@@ -21,7 +21,7 @@ where surviving scope is placed (§2), provenance of coined terms (§3), and the
 At write time, open the cited ADR and confirm that the number exists and that **what you cite is actually written in that ADR**.
 ADR numbers cited from memory are wrong at a high rate.
 
-- Case: CA `0ce5430` (2026-08-24) — the Review-when addendum to ADR-0069 was sent back by adr-reviewer.
+- Case: CA `0ce5430` (2026-08-24) — the Review-when addendum to ADR-0069 was sent back by decision-history-reviewer.
   Removed the misquote of ADR-0072 and the misreference to 0044, and restored the cited claim's strength to the original text
 
 ## 2. Where surviving scope is placed (partial supersede)
@@ -31,7 +31,7 @@ only in the backward half (the old ADR) — when later partial supersedes stack 
 on the forward side become false as of their date.
 
 - Case: CA `423c732` (2026-08-15) — surviving scope was wrong in 4 of 5 new ADRs.
-  The "Which half states which scope." section of CA `docs/adr/README.md` is a product of this finding
+  The "Which half states which scope." section of CA `docs/decision-history/README.md` is a product of this finding
 
 ## 3. Provenance of coined terms
 
@@ -59,7 +59,7 @@ to `docs/evidence/` or rewrite the wording to be path-independent.
 
 ## 6. Sources and denominators of numbers
 
-The canonical source is adr-reviewer criterion §6 (Numeric Claims). Only the write-time essentials: attach a command / log /
+The canonical source is decision-history-reviewer criterion §6 (Numeric Claims). Only the write-time essentials: attach a command / log /
 measurement date to each number, and give the denominator for percentages ("54% (45/83)"). Mark numbers that drift (file counts etc.)
 explicitly as snapshots with a measurement date.
 
@@ -69,7 +69,7 @@ For expiry conditions of the form "N times in a row" or "M occurrences in 30 day
 the judge, the slot). If you cannot name it, it is unmeasurable — rewrite it as an event condition or an author judgment.
 
 - Case: harness ADR-0046 (2026-08-22) — both the target and the judge were replaced while the gate had 0 observations,
-  making the count meaningless. Promoted to adr-reviewer criterion §1
+  making the count meaningless. Promoted to decision-history-reviewer criterion §1
 
 ## 8. Scope mismatch between the record and the actual diff
 

@@ -39,7 +39,7 @@ __all__ = [
     "_tracked_files",
 ]
 
-_ADR_REF_RE = re.compile(r"\bADR[- ](\d{4})\b")
+_ADR_REF_RE = re.compile(r"(?:\bADR[- ]|経緯 )(\d{4})\b")  # "ADR-0035", "ADR 0035", "経緯 0035"
 _MD_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 _INLINE_CODE_RE = re.compile(r"`([^`\n]+)`")
 _HEADING_RE = re.compile(r"^## (.+?)\s*$")

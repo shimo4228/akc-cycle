@@ -169,7 +169,7 @@ in `evidence` are the improvement list handed to the next stage.
 
 ## Related
 
-- **Code-LLM layering** ([AKC ADR-0008](https://github.com/shimo4228/agent-knowledge-cycle/blob/main/docs/adr/0008-code-and-llm-collaboration.md))
+- **Code-LLM layering** ([AKC ADR-0008](https://github.com/shimo4228/agent-knowledge-cycle/blob/main/docs/decision-history/0008-code-and-llm-collaboration.md))
   — the architecture-level "LLM judge + Code enforce" pattern (judgment never
   mutates state directly); this skill designs the judge's inside. Not an
   installed skill: it lives in the AKC repo (and as a public skill repo that

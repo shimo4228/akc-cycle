@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.7.0] — 2026-11-08
+
+### Changed
+
+- `adr-writer` is renamed `decision-history`: a decision is recorded as a dated, past-tense entry in `docs/decision-history/`, without a Status field or supersede notes on older entries.
+- The stocktake skills (`skill-stocktake`, `agent-stocktake`, `repo-asset-stocktake`) put low-usage components forward as Retire candidates, and `repo-asset-stocktake` retires with `git rm` instead of a `.disabled` rename; `learn-eval` confirms its candidates in one report with one reply.
+- `skill-writer` fixes the intent packet itself and shows it with the finished draft; `measurement-discipline` fixes a known cause before collecting more runs; `harness-stocktake` goes on after a clean rebase that passes verify.
+
 ## [1.6.6] — 2026-11-04
 
 ### Changed
