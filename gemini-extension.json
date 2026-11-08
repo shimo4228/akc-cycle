@@ -1,5 +1,5 @@
 {
   "name": "akc-cycle",
-  "version": "1.6.6",
+  "version": "1.8.0",
   "description": "Agent Knowledge Cycle (AKC) skills that keep the rules and skills of a coding-agent setup from piling up and going stale."
 }
