@@ -8,7 +8,7 @@ Listed in the Claude plugin directory (as of 2026-10-08).
 
 ## Install
 
-There are two parts, and each works without the other. The **rules file** is one Markdown file of about 5 KB (as of v1.5.0) that Claude Code reads at the start of every session, so the agent applies the habits without being asked. The **plugin** adds a skill for each step, with the procedure written out; if you only want the audits, the plugin alone is enough. Claude Code plugins have no slot for a rules file that loads every session (as of 2026-10-08), so the rules file is installed separately.
+There are two parts, and each works without the other. The **rules file** is one Markdown file of about 5 KB (as of v1.8.0) that Claude Code reads at the start of every session, so the agent applies the habits without being asked. The **plugin** adds a skill for each step, with the procedure written out; if you only want the audits, the plugin alone is enough. Claude Code plugins have no slot for a rules file that loads every session (as of 2026-10-08), so the rules file is installed separately.
 
 ### Rules file
 
@@ -39,7 +39,7 @@ The verdicts arrive as one report. You change the items you disagree with and ap
 What the plugin adds and runs:
 
 - It adds skills only: no hooks, no MCP servers, no settings.
-- The skills Claude can pick from a plain request keep their description in context, about 2,600 characters in all (as of v1.6.0); the full instructions load only when a skill runs. `harness-stocktake`, `hook-stocktake`, `skill-health`, `agent-stocktake`, `rules-distill`, `review-to-lint`, `generation-audit`, `harness-boundary`, `llm-as-judge` and `author-calibrated-eval` stay out of context and run only when you call them by name. To install only some skills, see [Single skills](#single-skills).
+- The skills Claude can pick from a plain request keep their description in context, about 2,400 characters in all (as of v1.8.0); the full instructions load only when a skill runs. `harness-stocktake`, `hook-stocktake`, `skill-health`, `agent-stocktake`, `rules-distill`, `review-to-lint`, `generation-audit`, `harness-boundary`, `llm-as-judge` and `author-calibrated-eval` stay out of context and run only when you call them by name. To install only some skills, see [Single skills](#single-skills).
 - Some skills, `skill-stocktake` among them, run bundled Python scripts with [`uv`](https://docs.astral.sh/uv/) and Python 3.11 or later.
 - The audit skills propose a verdict for each file (such as keep, update, merge, retire or dissolve) and change files only after you approve the report. The changes land on a git branch of the audited directory (`~/.claude` for the harness audits), so the apply step needs that directory under git; a file git does not track, such as an untracked `settings.json`, changes only after you merge.
 - `context-sync` edits existing documentation files without asking and lists every edit at the end, so `git diff` shows what changed; it asks once before creating new files.
@@ -56,7 +56,7 @@ git clone https://github.com/shimo4228/skill-health
 cp -r skill-stocktake/skills/skill-stocktake skill-health/skills/skill-health ~/.claude/skills/
 ```
 
-A skill installed this way is called by its plain name, such as `/skill-stocktake`. The other skills in the plugin have no repository of their own.
+A skill installed this way is called by its plain name, such as `/skill-stocktake`. For the audits alone, [`harness-stocktake`](https://github.com/shimo4228/harness-stocktake) is a separate plugin that bundles `harness-stocktake` with the nine skills above it uses. The other skills in this plugin have no repository of their own.
 
 ## What each phase does
 
