@@ -4,3 +4,17 @@
 # sub-project の [tool.ruff] と同じ値に揃える（requires-python >=3.11）。
 target-version = "py311"
 line-length = 100
+
+# lint の select は harness の root ruff.toml と同じ明示 pin (既定に委ねると版更新で判定が動く)。
+# [tool.ruff] を持たない sub-project (skill-comply) はこの設定で判定される。
+[lint]
+select = ["E4", "E7", "E9", "F", "I", "B", "UP", "C901", "ANN001", "ANN002", "ANN003", "ANN201", "ANN401"]
+
+[lint.per-file-ignores]
+"**/tests/**" = ["ANN"]
+
+[lint.isort]
+known-first-party = ["scripts"]
+
+[lint.mccabe]
+max-complexity = 15  # prune, don't raise — 変えるときは .claude/verify.md に日付つき理由
